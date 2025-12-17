@@ -126,29 +126,31 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, $id)
-    {
-        //$request->validate(Category::rules($id));
+{
+    Gate::authorize('categories.update');
 
-        $category = Category::findOrFail($id);
+    $category = Category::findOrFail($id);
+    $old_image = $category->image;
 
-        $old_image = $category->image;
+    // ✅ Use only validated data
+    $data = $request->validated();
 
-        $data = $request->except('image');
-        $new_image = $this->uploadImgae($request);
-        if ($new_image) {
-            $data['image'] = $new_image;
-        }
-        
-        $category->update( $data );
-        //$category->fill($request->all())->save();
-
-        if ($old_image && $new_image) {
-            Storage::disk('public')->delete($old_image);
-        }
-
-        return Redirect::route('dashboard.categories.index')
-            ->with('success', 'Category updated!');
+    // Handle image upload
+    if ($request->hasFile('image')) {
+        $data['image'] = $this->uploadImgae($request);
     }
+
+    $category->update($data);
+
+    // Delete old image if replaced
+    if ($old_image && isset($data['image'])) {
+        Storage::disk('public')->delete($old_image);
+    }
+
+    return Redirect::route('dashboard.categories.index')
+        ->with('success', 'Category updated!');
+}
+
 
    
     public function destroy(Category $category)

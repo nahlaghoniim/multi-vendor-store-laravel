@@ -1,8 +1,9 @@
 <?php
 use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Dashboard\ProfileController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Dashboard\CategoriesController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::group([
     'middleware' => ['auth'], // use default web guard
@@ -15,7 +16,7 @@ Route::group([
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Dashboard home
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/', [DashboardController::class, 'index'])->name('index');
 
     // Categories resource + extra routes
     Route::resource('categories', CategoriesController::class);

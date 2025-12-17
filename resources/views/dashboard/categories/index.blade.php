@@ -9,10 +9,8 @@
 
 @section('content')
 
-{{-- Top Actions --}}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h5 class="mb-0">Categories</h5>
-
+{{-- Top Actions (NO title here – layout already shows it) --}}
+<div class="d-flex justify-content-end align-items-center mb-4">
     <div>
         <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-primary me-2">
             + Create
@@ -23,11 +21,12 @@
     </div>
 </div>
 
+{{-- Alerts --}}
 <x-alert type="success" />
 <x-alert type="info" />
 
 {{-- Filter --}}
-<form action="{{ URL::current() }}" method="get" class="card card-body mb-4">
+<form action="{{ url()->current() }}" method="get" class="card card-body mb-4">
     <div class="row g-3 align-items-end">
         <div class="col-md-4">
             <label class="form-label">Name</label>
@@ -38,13 +37,19 @@
             <label class="form-label">Status</label>
             <select name="status" class="form-select">
                 <option value="">All</option>
-                <option value="active" @selected(request('status') == 'active')>Active</option>
-                <option value="archived" @selected(request('status') == 'archived')>Archived</option>
+                <option value="active" @selected(request('status') === 'active')>
+                    Active
+                </option>
+                <option value="archived" @selected(request('status') === 'archived')>
+                    Archived
+                </option>
             </select>
         </div>
 
         <div class="col-md-2">
-            <button class="btn btn-dark w-100">Filter</button>
+            <button class="btn btn-dark w-100">
+                Filter
+            </button>
         </div>
     </div>
 </form>
@@ -77,6 +82,7 @@
                                     width="45"
                                     height="45"
                                     style="object-fit: cover"
+                                    alt="{{ $category->name }}"
                                 >
                             @else
                                 <span class="text-muted">—</span>
