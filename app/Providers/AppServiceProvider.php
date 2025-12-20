@@ -34,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
                 return base_path('public_html');
             });
         }
+    $this->app->register(\Bezhanov\Faker\Laravel\FakerServiceProvider::class);
 
     }
 

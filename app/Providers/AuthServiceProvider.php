@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Policies\ProductPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,15 +15,16 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Product' => 'App\Policies\ModelPolicy',
-        // 'App\Models\Role' => 'App\Policies\ModelPolicy',
-        // 'App\Models\Category' => 'App\Policies\ModelPolicy',
+        Product::class => ProductPolicy::class,
+        // Add other models here
     ];
-    
+
+    /**
+     * Register any application services.
+     */
     public function register()
     {
-        parent::register();
-
+        // Optional: bind abilities if you need
         $this->app->bind('abilities', function() {
             return include base_path('data/abilities.php');
         });
@@ -29,21 +32,21 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Register any authentication / authorization services.
-     *
-     * @return void
      */
     public function boot()
     {
         $this->registerPolicies();
 
+        // Super admin bypass
         Gate::before(function ($user, $ability) {
             if ($user->super_admin) {
                 return true;
             }
         });
 
-        foreach ($this->app->make('abilities') as $code => $lable) {
-            Gate::define($code, function($user) use ($code) {
+        // Define gates from abilities.php
+        foreach ($this->app->make('abilities') as $code => $label) {
+            Gate::define($code, function ($user) use ($code) {
                 return $user->hasAbility($code);
             });
         }

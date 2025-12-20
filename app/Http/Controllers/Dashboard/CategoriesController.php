@@ -21,16 +21,32 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-{
-    Gate::authorize('categories.view');
+    {
+        if (!Gate::allows('categories.view')) {
+            abort(403);
+        }
+        
+        $request = request();
+       
+        $categories = Category::with('parent')
+         
+            ->withCount([
+                'products as products_number' => function($query) {
+                    $query->where('status', '=', 'active');
+                }
+            ])
+            ->filter($request->query())
+            ->orderBy('categories.name')
+            ->paginate(); 
+        
+        return view('dashboard.categories.index', compact('categories'));
+    }
 
-    $categories = Category::with('parent')
-        ->latest()
-        ->paginate(10);
-
-    return view('dashboard.categories.index', compact('categories'));
-}
-
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create()
     {
         if (Gate::denies('categories.create')) {
@@ -49,29 +65,30 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    Gate::authorize('categories.create');
+    {
+        Gate::authorize('categories.create');
 
-    $data = $request->validate(
-        Category::rules(),
-        [
+        $clean_data = $request->validate(Category::rules(), [
             'required' => 'This field (:attribute) is required',
-            'name.unique' => 'This name already exists!',
-        ]
-    );
+            'name.unique' => 'This name is already exists!'
+        ]);
 
-    $data['slug'] = Str::slug($data['name']);
+        // Request merge
+        $request->merge([
+            'slug' => Str::slug($request->post('name'))
+        ]);
 
-    if ($request->hasFile('image')) {
+        $data = $request->except('image');
         $data['image'] = $this->uploadImgae($request);
+
+        
+        // Mass assignment
+        $category = Category::create( $data );
+        
+        // PRG
+        return Redirect::route('dashboard.categories.index')
+            ->with('success', 'Category created!');
     }
-
-    Category::create($data);
-
-    return Redirect::route('dashboard.categories.index')
-        ->with('success', 'Category created!');
-}
-
 
     /**
      * Display the specified resource.
@@ -106,8 +123,7 @@ class CategoriesController extends Controller
                 ->with('info', 'Record not found!');
         }
         
-        // SELECT * FROM categories WHERE id <> $id 
-        // AND (parent_id IS NULL OR parent_id <> $id)
+       
         $parents = Category::where('id', '<>', $id)
             ->where(function($query) use ($id) {
                 $query->whereNull('parent_id')
@@ -126,33 +142,36 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(CategoryRequest $request, $id)
-{
-    Gate::authorize('categories.update');
+    {
+        //$request->validate(Category::rules($id));
 
-    $category = Category::findOrFail($id);
-    $old_image = $category->image;
+        $category = Category::findOrFail($id);
 
-    // ✅ Use only validated data
-    $data = $request->validated();
+        $old_image = $category->image;
 
-    // Handle image upload
-    if ($request->hasFile('image')) {
-        $data['image'] = $this->uploadImgae($request);
+        $data = $request->except('image');
+        $new_image = $this->uploadImgae($request);
+        if ($new_image) {
+            $data['image'] = $new_image;
+        }
+        
+        $category->update( $data );
+        //$category->fill($request->all())->save();
+
+        if ($old_image && $new_image) {
+            Storage::disk('public')->delete($old_image);
+        }
+
+        return Redirect::route('dashboard.categories.index')
+            ->with('success', 'Category updated!');
     }
 
-    $category->update($data);
-
-    // Delete old image if replaced
-    if ($old_image && isset($data['image'])) {
-        Storage::disk('public')->delete($old_image);
-    }
-
-    return Redirect::route('dashboard.categories.index')
-        ->with('success', 'Category updated!');
-}
-
-
-   
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(Category $category)
     {
         Gate::authorize('categories.delete');

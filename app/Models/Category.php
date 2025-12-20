@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name', 'parent_id', 'description', 'image', 'status', 'slug'
@@ -50,8 +50,7 @@ class Category extends Model
         $query->where('status', $filters['status']);
     }
 
-    return $query; // ✅ CORRECT
-}
+    return $query; }
 
 
     public static function rules($id = 0)

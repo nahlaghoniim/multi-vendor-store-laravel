@@ -9,7 +9,6 @@
 
 @section('content')
 
-{{-- Top Actions (NO title here – layout already shows it) --}}
 <div class="d-flex justify-content-end align-items-center mb-4">
     <div>
         <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-primary me-2">

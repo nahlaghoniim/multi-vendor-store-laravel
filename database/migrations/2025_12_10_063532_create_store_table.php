@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('store', function (Blueprint $table) {
+        Schema::create('stores', function (Blueprint $table) {
          // id BIGINT UNSIGNED AUTO INCREMENT PRIMARY
             $table->id();
             $table->string('name'); // VARCHAR(255)
