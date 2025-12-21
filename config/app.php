@@ -71,6 +71,7 @@ return [
     */
 
     'timezone' => 'UTC',
+    'currency'=> 'USD',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +184,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+            'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
+'Currency' => App\Helpers\Currency::class,
     ])->toArray(),
 
 ];

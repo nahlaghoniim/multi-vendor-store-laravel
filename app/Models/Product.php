@@ -115,4 +115,14 @@ class Product extends Model
           
         });
     }
+    public function getRouteKeyName()
+{
+    return 'slug';
+}
+public function resolveRouteBinding($value, $field = null)
+{
+    return static::withoutGlobalScope(\App\Models\Scopes\StoreScope::class)
+        ->where($field ?? $this->getRouteKeyName(), $value)
+        ->firstOrFail();
+}
 }

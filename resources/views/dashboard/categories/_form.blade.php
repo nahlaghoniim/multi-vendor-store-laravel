@@ -41,3 +41,18 @@
     <div class="form-group">
         <button type="submit" class="btn btn-primary">{{ $button_label ?? 'Save' }}</button>
     </div>
+    @push('styles')
+<link href="https://unpkg.com/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+<script>
+    var inputElm = document.querySelector('[name=tags]'),
+        tagify = new Tagify(inputElm);
+</script>
+@endpush
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" type="text/css" />
+@endpush
