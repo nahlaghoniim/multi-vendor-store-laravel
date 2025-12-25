@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 use Stripe\StripeClient;
+use App\Repositories\Cart\CartRepository;
+use App\Repositories\Cart\CartModelRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,7 +37,10 @@ class AppServiceProvider extends ServiceProvider
             });
         }
     $this->app->register(\Bezhanov\Faker\Laravel\FakerServiceProvider::class);
-
+$this->app->bind(
+        CartRepository::class,
+        CartModelRepository::class
+    );
     }
 
     /**

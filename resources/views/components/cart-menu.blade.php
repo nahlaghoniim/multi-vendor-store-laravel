@@ -33,5 +33,4 @@
                 <span>Total</span>
               
     </div>
-    <!--/ End Shopping Item -->
 </div>
