@@ -15,8 +15,8 @@ Route::get('/products/{product:slug}', [ProductsController::class, 'show'])->nam
 
 Route::resource('cart', CartController::class);
 
-Route::get('/checkout', [CheckoutController::class, 'create'])->name('checkout');
-Route::post('/checkout', [CheckoutController::class, 'store']);
+ Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
+    Route::post('checkout', [CheckoutController::class, 'store']);
 Route::post('/currency/change', [CurrencyConverterController::class, 'store'])
     ->name('currency.change');Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
