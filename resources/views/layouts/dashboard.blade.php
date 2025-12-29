@@ -240,10 +240,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
-    <script>
-        const userID = "{{ Auth::id() }}";
-    </script>
-    <script src="{{ asset('js/app.js') }}"></script>
+   <script>
+    window.userID = @json(auth()->id());
+</script>
+
+@vite(['resources/js/app.js'])
     @stack('scripts')
 </body>
 

@@ -50,6 +50,7 @@ $this->app->bind(
      */
     public function boot()
     {
+        
 
         JsonResource::withoutWrapping();
 
@@ -59,5 +60,6 @@ $this->app->bind(
 
         Paginator::useBootstrapFour();
         //Paginator::defaultView('pagination.custom');
+        
     }
 }
