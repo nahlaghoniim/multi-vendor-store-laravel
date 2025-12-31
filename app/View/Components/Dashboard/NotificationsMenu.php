@@ -24,10 +24,11 @@ class NotificationsMenu extends Component
             return;
         }
 
+        // Use unreadNotifications() with () to get query builder
         $this->notifications = $user
             ->unreadNotifications()
             ->latest()
-            ->take($count)
+            ->limit($count)
             ->get();
 
         $this->newCount = $this->notifications->count();

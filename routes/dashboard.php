@@ -6,10 +6,12 @@ use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'check.user.type:admin,super-admin'])
-    ->prefix('dashboard')
-    ->as('dashboard.')
-    ->group(function () {
+Route::group([
+    'middleware' => ['auth:admin'],
+    'as' => 'dashboard.',
+    'prefix' => 'admin/dashboard',
+], 
+function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('index');
 
