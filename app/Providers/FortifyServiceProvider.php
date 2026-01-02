@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use App\Actions\Fortify\AuthenticateUser;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserPassword;
@@ -60,25 +60,14 @@ class FortifyServiceProvider extends ServiceProvider
             return Limit::perMinute(5)->by($request->session()->get('login.id'));
         });
 
-        // Fixed: Use a closure instead of array
-        Fortify::authenticateUsing(function (Request $request) {
-            $guard = Config::get('fortify.guard', 'web');
-            
-            if (Auth::guard($guard)->attempt(
-                $request->only('email', 'password'),
-                $request->boolean('remember')
-            )) {
-                return Auth::guard($guard)->user();
-            }
-            
-            return null;
-        });
-
-        // Set view prefix based on guard
+        
         if (Config::get('fortify.guard') == 'admin') {
+            Fortify::authenticateUsing([new AuthenticateUser, 'authenticate']);
             Fortify::viewPrefix('auth.');
         } else {
             Fortify::viewPrefix('front.auth.');
         }
+
+     
     }
 }
