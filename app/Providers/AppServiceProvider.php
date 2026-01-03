@@ -15,6 +15,7 @@ use Stripe\StripeClient;
 use App\Repositories\Cart\CartRepository;
 use App\Repositories\Cart\CartModelRepository;
 
+
 class AppServiceProvider extends ServiceProvider
 {
     /**

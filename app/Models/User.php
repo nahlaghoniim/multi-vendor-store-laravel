@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Crypt;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * @method bool tokenCan(string $ability)
+ * @method \Laravel\Sanctum\PersonalAccessToken|null currentAccessToken()
+ */
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, 
