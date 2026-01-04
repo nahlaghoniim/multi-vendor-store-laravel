@@ -51,7 +51,7 @@ $this->app->bind(
      */
     public function boot()
     {
-        
+App::setLocale(request()->get('locale', 'en'));
 
         JsonResource::withoutWrapping();
 

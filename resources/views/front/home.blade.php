@@ -106,8 +106,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-1.png') }}" alt="featured">                         </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -123,8 +122,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-2.png') }}" alt="featured">                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -140,8 +138,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-3.png') }}" alt="featured">                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -157,8 +154,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-4.png') }}" alt="featured">                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -174,8 +170,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-5.png') }}" alt="featured">                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -191,8 +186,7 @@
                             <li><a href="product-grids.html">View All</a></li>
                         </ul>
                         <div class="images">
-                            <img src="https://via.placeholder.com/180x180" alt="#">
-                        </div>
+<img src="{{ asset('assets/images/home/fetured-item-6.png') }}" alt="featured">                        </div>
                     </div>
                     <!-- End Single Category -->
                 </div>
@@ -276,8 +270,7 @@
                             <!-- Start Single Product -->
                             <div class="single-product">
                                 <div class="product-image">
-                                    <img src="https://via.placeholder.com/335x335" alt="#">
-                                    <div class="button">
+<img src="{{ asset('assets/images/home/product-3.jpg') }}" alt="product">                                    <div class="button">
                                         <a href="product-details.html" class="btn"><i class="lni lni-cart"></i> Add to
                                             Cart</a>
                                     </div>
@@ -306,8 +299,7 @@
                             <!-- Start Single Product -->
                             <div class="single-product">
                                 <div class="product-image">
-                                    <img src="https://via.placeholder.com/335x335" alt="#">
-                                    <div class="button">
+<img src="{{ asset('assets/images/home/product-8.jpg') }}" alt="product">                                    <div class="button">
                                         <a href="product-details.html" class="btn"><i class="lni lni-cart"></i> Add to
                                             Cart</a>
                                     </div>
@@ -336,8 +328,7 @@
                             <!-- Start Single Product -->
                             <div class="single-product">
                                 <div class="product-image">
-                                    <img src="https://via.placeholder.com/335x335" alt="#">
-                                    <div class="button">
+<img src="{{ asset('assets/images/home/product-6.jpg') }}" alt="product">                                    <div class="button">
                                         <a href="product-details.html" class="btn"><i class="lni lni-cart"></i> Add to
                                             Cart</a>
                                     </div>
@@ -383,8 +374,7 @@
                 <div class="col-lg-4 col-md-12 col-12">
                     <div class="offer-content">
                         <div class="image">
-                            <img src="https://via.placeholder.com/510x600" alt="#">
-                            <span class="sale-tag">-50%</span>
+<img src="{{ asset('assets/images/home/offer-image.jpg') }}" alt="offer">                            <span class="sale-tag">-50%</span>
                         </div>
                         <div class="text">
                             <h2><a href="product-grids.html">Bluetooth Headphone</a></h2>
@@ -440,7 +430,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/videocamera.jpg') }}" alt="camera">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -453,7 +444,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/headphones.jpg') }}" alt="headphones">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -466,7 +458,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/officejet.jpg') }}" alt="officejet">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -482,7 +475,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/iphonecamera.jpg') }}" alt="iphone">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -495,7 +489,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/canon.jpg') }}" alt="canon">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -508,7 +503,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/xbox.jpg') }}" alt="xbox">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -524,7 +520,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/camra2.jpg') }}" alt="camra">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -537,7 +534,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/mobilegalaxy.jpg') }}" alt="galaxy">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -550,7 +548,8 @@
                     <!-- Start Single List -->
                     <div class="single-list">
                         <div class="list-image">
-                            <a href="product-grids.html"><img src="https://via.placeholder.com/100x100" alt="#"></a>
+                            <a href="product-grids.html"><img src="{{ asset('assets/images/home/bluetooth.jpg') }}" alt="bluetooth">
+</a>
                         </div>
                         <div class="list-info">
                             <h3>
@@ -577,28 +576,28 @@
             <div class="brands-logo-wrapper">
                 <div class="brands-logo-carousel d-flex align-items-center justify-content-between">
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/02.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/03.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/04.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/05.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/06.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/04.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/02.png') }}" alt="brand">
                     </div>
                     <div class="brand-logo">
-                        <img src="https://via.placeholder.com/220x160" alt="#">
+<img src="{{ asset('assets/images/home/03.png') }}" alt="brand">
                     </div>
                 </div>
             </div>
@@ -624,7 +623,7 @@
                     <div class="single-blog">
                         <div class="blog-img">
                             <a href="blog-single-sidebar.html">
-                                <img src="https://via.placeholder.com/370x215" alt="#">
+<img src="{{ asset('assets/images/home/blog-1.jpg') }}" alt="Blog Image">
                             </a>
                         </div>
                         <div class="blog-content">
@@ -646,7 +645,7 @@
                     <div class="single-blog">
                         <div class="blog-img">
                             <a href="blog-single-sidebar.html">
-                                <img src="https://via.placeholder.com/370x215" alt="#">
+<img src="{{ asset('assets/images/home/blog-2.jpg') }}" alt="Blog Image">
                             </a>
                         </div>
                         <div class="blog-content">
@@ -668,7 +667,7 @@
                     <div class="single-blog">
                         <div class="blog-img">
                             <a href="blog-single-sidebar.html">
-                                <img src="https://via.placeholder.com/370x215" alt="#">
+<img src="{{ asset('assets/images/home/blog-3.jpg') }}" alt="Blog Image">
                             </a>
                         </div>
                         <div class="blog-content">
@@ -743,6 +742,7 @@
 @push('scripts')
     <script type="text/javascript">
         //========= Hero Slider 
+        
         tns({
             container: '.hero-slider',
             slideBy: 'page',
@@ -782,37 +782,38 @@
         });
 
     </script>
-    <script>
-        const finaleDate = new Date("February 15, 2023 00:00:00").getTime();
+  <script>
+    const finaleDate = new Date("February 15, 2026 00:00:00").getTime(); // Change year to 2026
 
-        const timer = () => {
-            const now = new Date().getTime();
-            let diff = finaleDate - now;
-            if (diff < 0) {
-                document.querySelector('.alert').style.display = 'block';
-                document.querySelector('.container').style.display = 'none';
-            }
-
-            let days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            let hours = Math.floor(diff % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
-            let minutes = Math.floor(diff % (1000 * 60 * 60) / (1000 * 60));
-            let seconds = Math.floor(diff % (1000 * 60) / 1000);
-
-            days <= 99 ? days = `0${days}` : days;
-            days <= 9 ? days = `00${days}` : days;
-            hours <= 9 ? hours = `0${hours}` : hours;
-            minutes <= 9 ? minutes = `0${minutes}` : minutes;
-            seconds <= 9 ? seconds = `0${seconds}` : seconds;
-
-            document.querySelector('#days').textContent = days;
-            document.querySelector('#hours').textContent = hours;
-            document.querySelector('#minutes').textContent = minutes;
-            document.querySelector('#seconds').textContent = seconds;
-
+    const timer = () => {
+        const now = new Date().getTime();
+        let diff = finaleDate - now;
+        
+        if (diff < 0) {
+            document.querySelector('.alert').style.display = 'block';
+            document.querySelector('.hero-area .container').style.display = 'none';
         }
-        timer();
-        setInterval(timer, 1000);
-    </script>
+
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor(diff % (1000 * 60 * 60 * 24) / (1000 * 60 * 60));
+        let minutes = Math.floor(diff % (1000 * 60 * 60) / (1000 * 60));
+        let seconds = Math.floor(diff % (1000 * 60) / 1000);
+
+        days <= 99 ? days = `0${days}` : days;
+        days <= 9 ? days = `00${days}` : days;
+        hours <= 9 ? hours = `0${hours}` : hours;
+        minutes <= 9 ? minutes = `0${minutes}` : minutes;
+        seconds <= 9 ? seconds = `0${seconds}` : seconds;
+
+        document.querySelector('#days').textContent = days;
+        document.querySelector('#hours').textContent = hours;
+        document.querySelector('#minutes').textContent = minutes;
+        document.querySelector('#seconds').textContent = seconds;
+    }
+    
+    timer();
+    setInterval(timer, 1000);
+</script>
 @endpush
 
 </x-front-layout>

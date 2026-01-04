@@ -1,10 +1,12 @@
 <!-- Start Single Product -->
 <div class="single-product">
     <div class="product-image">
-        <img src="{{ $product->image_url }}" alt="#">
-        @if ($product->sale_percent)
-        <span class="sale-tag">-{{ $product->sale_percent }}%</span>
-        @endif
+<img 
+    src="{{ $product->image 
+        ? asset($product->image) 
+        : asset('images/products/placeholder.png') }}" 
+    alt="{{ $product->name }}">
+
         @if ($product->new)
         <span class="new-tag">New</span>
         @endif

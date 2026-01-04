@@ -79,7 +79,8 @@
                     <div class="col-lg-4 col-md-4 col-12">
                         <div class="top-middle">
                             <ul class="useful-links">
-                                <li><a href="index.html">{{ trans('Home') }}</a></li>
+                            <li><a href="{{ route('home') }}">{{ trans('Home') }}</a></li>
+
                                 <li><a href="about-us.html">@lang('About Us')</a></li>
                                 <li><a href="contact.html">{{ __('Contact Us') }}</a></li>
                             </ul>
