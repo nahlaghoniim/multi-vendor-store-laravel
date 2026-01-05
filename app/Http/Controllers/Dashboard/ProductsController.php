@@ -26,20 +26,48 @@ class ProductsController extends Controller
         return view('dashboard.products.create');
     }
 
-    public function store(Request $request)
-    {
-        $this->authorize('create', Product::class);
+public function store(Request $request)
+{
+    $this->authorize('create', Product::class);
 
-        $product = Product::create($request->except('tags'));
+    $data = $request->except('tags');
 
-        if ($request->filled('tags')) {
-            $this->syncTags($product, $request->tags);
-        }
-
-        return redirect()
-            ->route('dashboard.products.index')
-            ->with('success', 'Product created successfully');
+    if ($request->hasFile('image')) {
+        $data['image'] = $request->file('image')->store('uploads', 'public');
     }
+
+    $product = Product::create($data);
+
+    if ($request->filled('tags')) {
+        $this->syncTags($product, $request->tags);
+    }
+
+    return redirect()->route('dashboard.products.index')
+        ->with('success', 'Product created successfully');
+}
+
+public function update(Request $request, Product $product)
+{
+    $this->authorize('update', $product);
+
+    $data = $request->except('tags');
+
+    if ($request->hasFile('image')) {
+        $data['image'] = $request->file('image')->store('uploads', 'public');
+    }
+
+    $product->update($data);
+
+    if ($request->filled('tags')) {
+        $this->syncTags($product, $request->tags);
+    }
+
+    return redirect()->route('dashboard.products.index')
+        ->with('success', 'Product updated successfully');
+}
+
+
+
 
     public function edit(Product $product)
     {
@@ -50,20 +78,7 @@ class ProductsController extends Controller
         return view('dashboard.products.edit', compact('product', 'tags'));
     }
 
-    public function update(Request $request, Product $product)
-    {
-        $this->authorize('update', $product);
-
-        $product->update($request->except('tags'));
-
-        if ($request->filled('tags')) {
-            $this->syncTags($product, $request->tags);
-        }
-
-        return redirect()
-            ->route('dashboard.products.index')
-            ->with('success', 'Product updated successfully');
-    }
+   
 
     public function destroy(Product $product)
     {
@@ -96,5 +111,9 @@ class ProductsController extends Controller
         }
 
         $product->tags()->sync($tagIds);
+    }
+     protected function uploadImage(Request $request): string
+    {
+        return $request->file('image')->store('products', 'public');
     }
 }

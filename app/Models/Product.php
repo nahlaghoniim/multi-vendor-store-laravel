@@ -82,15 +82,15 @@ class Product extends Model
         Accessors
     --------------------------------*/
     public function getImageUrlAttribute()
-    {
-        if (!$this->image) {
-            return 'https://www.incathlab.com/images/products/default_product.png';
-        }
-
-        if (Str::startsWith($this->image, ['http://', 'https://'])) {
-            return $this->image;
-        }
-
-        return asset('storage/' . $this->image);
+{
+    if (!$this->image) {
+        return 'https://www.incathlab.com/images/products/default_product.png';
     }
+
+    if (Str::startsWith($this->image, ['http://', 'https://'])) {
+        return $this->image;
+    }
+
+    return asset('storage/' . $this->image);
+}
 }

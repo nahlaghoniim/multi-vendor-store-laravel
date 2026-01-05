@@ -11,7 +11,7 @@
                         <div class="hero-slider">
                             <!-- Start Single Slider -->
                             <div class="single-slider"
-                                style="background-image: url(https://via.placeholder.com/800x500);">
+style="background-image: url('{{ asset('images/hero/slider-bg2.png') }}');" >
                                 <div class="content">
                                     <h2><span>No restocking fee ($35 savings)</span>
                                         M75 Sport Watch
@@ -27,7 +27,7 @@
                             <!-- End Single Slider -->
                             <!-- Start Single Slider -->
                             <div class="single-slider"
-                                style="background-image: url(https://via.placeholder.com/800x500);">
+style="background-image: url('{{ asset('images/hero/slider-bg1.png') }}');" >
                                 <div class="content">
                                     <h2><span>Big Sale Offer</span>
                                         Get the Best Deal on CCTV Camera
@@ -50,7 +50,7 @@
                         <div class="col-lg-12 col-md-6 col-12 md-custom-padding">
                             <!-- Start Small Banner -->
                             <div class="hero-small-banner"
-                                style="background-image: url('https://via.placeholder.com/370x250');">
+style="background-image: url('{{ asset('images/hero/iphone.png') }}');" >
                                 <div class="content">
                                     <h2>
                                         <span>New line required</span>
@@ -223,7 +223,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-6 col-12">
-                    <div class="single-banner" style="background-image:url('https://via.placeholder.com/620x340')">
+                    <div class="single-banner" style="background-image: url('/images/hero/wz.png');"
+        >
                         <div class="content">
                             <h2>Smart Watch 2.0</h2>
                             <p>Space Gray Aluminum Case with <br>Black/Volt Real Sport Band </p>
@@ -235,7 +236,7 @@
                 </div>
                 <div class="col-lg-6 col-md-6 col-12">
                     <div class="single-banner custom-responsive-margin"
-                        style="background-image:url('https://via.placeholder.com/620x340')">
+                  style="background-image: url('/images/hero/wat.png');">
                         <div class="content">
                             <h2>Smart Headphone</h2>
                             <p>Lorem ipsum dolor sit amet, <br>eiusmod tempor
