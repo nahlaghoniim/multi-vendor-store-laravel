@@ -33,22 +33,31 @@ class AuthServiceProvider extends ServiceProvider
     /**
      * Register any authentication / authorization services.
      */
-    public function boot()
-    {
-        $this->registerPolicies();
+   public function boot()
+{
+    $this->registerPolicies();
 
-        // Super admin bypass
-        Gate::before(function ($user, $ability) {
-            if ($user->super_admin) {
+    Gate::before(function ($user, $ability) {
+        if (auth('admin')->check()) {
+            return true;
+        }
+
+        if (property_exists($user, 'super_admin') && $user->super_admin) {
+            return true;
+        }
+
+        return null;
+    });
+
+    foreach ($this->app->make('abilities') as $code => $label) {
+        Gate::define($code, function ($user) use ($code) {
+            if (auth('admin')->check()) {
                 return true;
             }
-        });
 
-        // Define gates from abilities.php
-        foreach ($this->app->make('abilities') as $code => $label) {
-            Gate::define($code, function ($user) use ($code) {
-                return $user->hasAbility($code);
-            });
-        }
+            return method_exists($user, 'hasAbility')
+                && $user->hasAbility($code);
+        });
     }
+}
 }

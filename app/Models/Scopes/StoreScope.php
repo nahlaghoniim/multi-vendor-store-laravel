@@ -1,44 +1,28 @@
 <?php
-
 namespace App\Models\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Support\Facades\Auth;
 
 class StoreScope implements Scope
 {
-    /**
-     * Apply the scope to a given Eloquent query builder.
-     *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
-     * @return void
-     */
-    public function apply(Builder $builder, Model $model): void
+    public function apply(Builder $builder, Model $model)
     {
-        $user = Auth::user();
-
-        // No authenticated user → do nothing (CLI, jobs, seeds)
-        if (!$user) {
+        if (auth('admin')->check()) {
             return;
         }
 
-        // Super admin should see all stores
-        if ($user->type === 'super-admin') {
+        if (auth()->check() && auth()->user()->store_id) {
+            $builder->where(
+                $model->getTable() . '.store_id',
+                auth()->user()->store_id
+            );
             return;
         }
 
-        // Vendor/admin MUST have store_id
-        if (!$user->store_id) {
+        if (auth()->check()) {
             abort(403, 'User is not assigned to any store.');
         }
-
-        $builder->where(
-            $model->getTable() . '.store_id',
-            $user->store_id
-        );
     }
-
 }

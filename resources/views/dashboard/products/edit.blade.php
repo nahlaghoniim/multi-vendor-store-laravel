@@ -10,7 +10,7 @@
 
 @section('content')
 
-<form action="{{ route('dashboard.products.update', $product->id) }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('dashboard.products.update', $product) }}" method="post" enctype="multipart/form-data">
     @csrf
     @method('put')
     
