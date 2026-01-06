@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\RolesController;
 use App\Http\Controllers\Dashboard\UsersController;
 use App\Http\Controllers\Dashboard\AdminsController;
+use App\Http\Controllers\Dashboard\ImportProductsController;
 
 Route::group([
     'middleware' => ['auth:admin,web'],
@@ -30,6 +31,9 @@ function () {
         Route::delete('categories/{category}/force-delete', [CategoriesController::class, 'forceDelete'])->name('categories.force-delete');
         Route::resource('categories', CategoriesController::class);
 
+    Route::get('products/import', [ImportProductsController::class, 'create'])
+        ->name('products.import');
+    Route::post('products/import', [ImportProductsController::class, 'store']);
         // Products
         Route::resource('products', ProductsController::class);
 // Users

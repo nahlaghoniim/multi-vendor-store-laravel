@@ -174,19 +174,24 @@ class CategoriesController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)
-    {
-        Gate::authorize('categories.delete');
-        
-        //$category = Category::findOrFail($id);
-        $category->delete();
-
-        //Category::where('id', '=', $id)->delete();
-        //Category::destroy($id);
-        
-
-        return Redirect::route('dashboard.categories.index')
-            ->with('success', 'Category deleted!');
+{
+    // Check if category has products
+    if ($category->products()->exists()) {
+        return redirect()
+            ->back()
+            ->withErrors([
+                'category' => 'Cannot delete category because it has products.'
+            ])
+            ->with('info', 'Category deletion blocked: products exist.');
     }
+
+    $category->delete();
+
+    return redirect()
+        ->route('dashboard.categories.index')
+        ->with('success', 'Category deleted successfully.');
+}
+
 
     protected function uploadImgae(Request $request)
     {

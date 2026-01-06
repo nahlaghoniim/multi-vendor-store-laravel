@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->float('price')->default(0);
             $table->float('compare_price')->nullable();
-            $table->json('options')->nullable();
+            $table->json('options')                ->restrictOnDelete();
+
             $table->float('rating')->default(0);
             $table->boolean('featured')->default(0);
 $table->enum('status', ['active', 'draft', 'archived'])->default('active');
