@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
-class AdminsController extends Controller
+class UsersController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->authorizeResource(Admin::class, 'admin');    
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -22,8 +17,10 @@ class AdminsController extends Controller
      */
     public function index()
     {
-        $admins = Admin::paginate();
-        return view('dashboard.admins.index', compact('admins'));
+        Gate::authorize('users.view');
+        
+        $users = User::paginate();
+        return view('dashboard.users.index', compact('users'));
     }
 
     /**
@@ -33,9 +30,9 @@ class AdminsController extends Controller
      */
     public function create()
     {
-        return view('dashboard.admins.create', [
-          //  'roles' => Role::all(),
-            'admin' => new Admin(),
+        return view('dashboard.users.create', [
+            'roles' => Role::all(),
+            'user' => new User(),
         ]);
     }
 
@@ -52,12 +49,12 @@ class AdminsController extends Controller
             'roles' => 'required|array',
         ]);
 
-        $admin = Admin::create($request->all());
-        $admin->roles()->attach($request->roles);
+        $user = User::create($request->all());
+        $user->roles()->attach($request->roles);
 
         return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin created successfully');
+            ->route('dashboard.users.index')
+            ->with('success', 'User created successfully');
     }
 
     /**
@@ -77,12 +74,12 @@ class AdminsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admin $admin)
+    public function edit(User $user)
     {
         $roles = Role::all();
-        $admin_roles = $admin->roles()->pluck('id')->toArray();
+        $user_roles = $user->roles()->pluck('id')->toArray();
         
-        return view('dashboard.admins.edit', compact('admin', 'roles', 'admin_roles'));
+        return view('dashboard.users.edit', compact('user', 'roles', 'user_roles'));
     }
 
     /**
@@ -92,19 +89,19 @@ class AdminsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
+    public function update(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'roles' => 'required|array',
         ]);
         
-        $admin->update($request->all());
-        $admin->roles()->sync($request->roles);
+        $user->update($request->all());
+        $user->roles()->sync($request->roles);
         
         return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin updated successfully');
+            ->route('dashboard.users.index')
+            ->with('success', 'User updated successfully');
     }
 
     /**
@@ -115,9 +112,9 @@ class AdminsController extends Controller
      */
     public function destroy($id)
     {
-        Admin::destroy($id);
+        User::destroy($id);
         return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin deleted successfully');
+            ->route('dashboard.users.index')
+            ->with('success', 'User deleted successfully');
     }
 }

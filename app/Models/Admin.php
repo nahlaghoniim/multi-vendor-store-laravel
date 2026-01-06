@@ -14,4 +14,9 @@ class Admin extends User
     protected $fillable = [
         'name', 'email', 'password', 'phone_number', 'super_admin', 'status',
     ];
+
+    public function roles()
+    {
+        return $this->morphToMany(Role::class, 'authorizable', 'role_user');
+    }
 }

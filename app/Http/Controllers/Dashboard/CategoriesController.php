@@ -22,6 +22,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+        
         if (!Gate::allows('categories.view')) {
             abort(403);
         }

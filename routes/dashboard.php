@@ -5,15 +5,19 @@ use App\Http\Controllers\Dashboard\CategoriesController;
 use App\Http\Controllers\Dashboard\ProductsController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Dashboard\RolesController;
+use App\Http\Controllers\Dashboard\UsersController;
+use App\Http\Controllers\Dashboard\AdminsController;
 
 Route::group([
-    'middleware' => ['auth:admin'],
+    'middleware' => ['auth:admin,web'],
     'as' => 'dashboard.',
     'prefix' => 'admin/dashboard',
 ], 
 function () {
 
         Route::get('/', [DashboardController::class, 'index'])->name('index');
+        Route::resource('roles', RolesController::class);
 
         // Profile
         Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,9 +32,12 @@ function () {
 
         // Products
         Route::resource('products', ProductsController::class);
+// Users
+Route::resource('users', UsersController::class);
+
+// Admins
+Route::resource('admins', AdminsController::class);
 
         // Other dashboard pages
         Route::view('orders', 'dashboard.orders.index')->name('orders.index');
-        Route::view('roles', 'dashboard.roles.index')->name('roles.index');
-        Route::view('users', 'dashboard.users.index')->name('users.index');
 });

@@ -37,27 +37,24 @@ class AuthServiceProvider extends ServiceProvider
 {
     $this->registerPolicies();
 
-    Gate::before(function ($user, $ability) {
-        if (auth('admin')->check()) {
-            return true;
-        }
-
-        if (property_exists($user, 'super_admin') && $user->super_admin) {
-            return true;
-        }
-
-        return null;
-    });
-
-    foreach ($this->app->make('abilities') as $code => $label) {
-        Gate::define($code, function ($user) use ($code) {
-            if (auth('admin')->check()) {
+        Gate::before(function ($user, $ability) {
+            if ($user->super_admin) {
                 return true;
             }
-
-            return method_exists($user, 'hasAbility')
-                && $user->hasAbility($code);
         });
+
+
+    foreach ($this->app->make('abilities') as $code => $label) {
+       Gate::define($code, function ($user) use ($code) {
+
+    // Allow only if THIS user is Admin model
+    if ($user instanceof \App\Models\Admin) {
+        return true;
+    }
+
+    return method_exists($user, 'hasAbility')
+        && $user->hasAbility($code);
+});
     }
 }
 }

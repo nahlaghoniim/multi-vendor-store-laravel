@@ -79,9 +79,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return Crypt::decryptString($value);
     }
-   public function hasAbility(string $ability): bool
-{
-    // Temporary: allow all abilities
-    return true;
-}
+  public function hasAbility(string $ability): bool { return $this->roles() ->whereHas('abilities', function ($query) use ($ability) { $query->where('ability', $ability) ->where('type', 'allow'); }) ->exists(); }
+  public function roles() { return $this->morphToMany( Role::class, 'authorizable', 'role_user' ); }
 }
