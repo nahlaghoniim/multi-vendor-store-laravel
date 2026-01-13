@@ -16,36 +16,33 @@
         </div>
 
         <ul class="shopping-list">
-            @foreach($items as $item)
-                <li>
-                    <a href="javascript:void(0)"
-                       class="remove"
-                       title="Remove this item">
-                        <i class="lni lni-close"></i>
+         @foreach($items as $item)
+    @php $product = $item->product; @endphp
+
+    @if($product)
+        <li>
+            <div class="cart-img-head">
+                <a href="{{ route('products.show', $product->slug) }}">
+                    <img src="{{ $product->image_url }}" alt="">
+                </a>
+            </div>
+
+            <div class="content">
+                <h4>
+                    <a href="{{ route('products.show', $product->slug) }}">
+                        {{ $product->name }}
                     </a>
+                </h4>
 
-                    <div class="cart-img-head">
-                        <a href="{{ route('products.show', $item->product->slug) }}">
-                            <img src="{{ $item->product->image_url }}" alt="">
-                        </a>
-                    </div>
+                <p class="quantity">
+                    {{ $item->quantity }}x -
+                    <span class="amount">{{ $item->price }}</span>
+                </p>
+            </div>
+        </li>
+    @endif
+@endforeach
 
-                    <div class="content">
-                        <h4>
-                            <a href="{{ route('products.show', $item->product->slug) }}">
-                                {{ $item->product->name }}
-                            </a>
-                        </h4>
-
-                        <p class="quantity">
-                            {{ $item->quantity }}x -
-                            <span class="amount">
-                                {{ Currency::format($item->product->price) }}
-                            </span>
-                        </p>
-                    </div>
-                </li>
-            @endforeach
         </ul>
 
         <div class="bottom">

@@ -12,6 +12,32 @@
                                 <h3>Login Now</h3>
                                 <p>You can login using your social media account or email address.</p>
                             </div>
+<div class="social-login mb-4">
+    <div class="d-grid gap-2">
+    <!-- Google Login -->
+    <a href="{{ route('auth.google') }}" class="btn btn-outline-danger d-flex align-items-center justify-content-center gap-2">
+        <img src="https://developers.google.com/identity/images/g-logo.png"
+             alt="Google"
+             width="18"
+             height="18">
+        <span>Continue with Google</span>
+    </a>
+
+    <!-- Facebook Login -->
+    <a href="{{ url('login/facebook') }}" class="btn btn-primary d-flex align-items-center justify-content-center gap-2">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png"
+             alt="Facebook"
+             width="18"
+             height="18">
+        <span>Continue with Facebook</span>
+    </a>
+</div>
+
+
+
+<div class="alt-option text-center mb-4">
+    <span>or login with email</span>
+</div>
                           {{--  <div class="social-login">
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-12"><a class="btn facebook-btn"

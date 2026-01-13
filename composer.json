@@ -10,10 +10,11 @@
         "laravel/fortify": "^1.32",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
+        "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.8",
         "mcamara/laravel-localization": "^2.0",
         "pusher/pusher-php-server": "^7.2",
-        "stripe/stripe-php": "^19.0",
+        "stripe/stripe-php": "^19.1",
         "symfony/intl": "^6.4"
     },
     "require-dev": {

@@ -53,8 +53,9 @@ class Cart extends Model
         ]);
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
+   public function product()
+{
+    return $this->belongsTo(Product::class)
+                ->withoutGlobalScope(\App\Models\Scopes\StoreScope::class);
+}
 }

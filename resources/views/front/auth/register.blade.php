@@ -1,3 +1,4 @@
+
 <x-front-layout title="Register">
     <x-slot:breadcrumb>
         <!-- Start Breadcrumbs -->
@@ -22,6 +23,7 @@
     </x-slot:breadcrumb>
 
     <!-- Start Account Register Area -->
+
     <div class="account-login section">
         <div class="container">
             <div class="row">
@@ -75,6 +77,16 @@
                             <p class="outer-link">Already have an account? <a href="{{ route('login') }}">Login Now</a>
                             </p>
                         </form>
+                        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
                     </div>
                 </div>
             </div>

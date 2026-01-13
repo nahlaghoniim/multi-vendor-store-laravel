@@ -9,6 +9,11 @@ use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\CurrencyConverterController;
 use App\Http\Controllers\Front\CheckoutController;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\Auth\SocialAuthController;
+use App\Http\Controllers\Front\PaymentsController;
+use App\Http\Controllers\Front\OrdersController;
+use App\Http\Controllers\StripeWebhooksController;
+
 Route::group([
     'prefix' => LaravelLocalization::setLocale(),
 ], function() {
@@ -31,6 +36,31 @@ Route::post('/currency/change', [CurrencyConverterController::class, 'store'])
 });
 Route::get('/auth/user/2fa', [TwoFactorAuthenticationController::class, 'index'])
     ->name('front.2fa');
+   // Redirect user to Google
+Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+
+// Handle callback from Google
+Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+Route::get('login/facebook', [SocialAuthController::class, 'redirectToFacebook']);
+Route::get('login/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
+Route::prefix(LaravelLocalization::setLocale())->group(function () {
+
+    // Show payment page
+    Route::get('/orders/{order}/payments/create', [PaymentsController::class, 'create'])
+        ->name('orders.payments.create');
+
+    // Create Stripe PaymentIntent
+   Route::post('orders/{order}/payments/stripe-intent', [PaymentsController::class, 'stripeIntent'])
+    ->name('stripe.paymentIntent.create');
+
+    // Confirm payment (redirect after success)
+    Route::get('/orders/{order}/payments/confirm', [PaymentsController::class, 'confirm'])
+        ->name('orders.payments.confirm');
+        Route::post('/orders', [OrdersController::class, 'store'])->name('orders.store');
+        Route::post('/stripe/webhook', [StripeWebhooksController::class, 'handle']);
+
+
+});
 
 //require __DIR__.'/auth.php';
 require __DIR__ . '/dashboard.php';

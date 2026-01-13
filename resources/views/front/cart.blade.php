@@ -49,40 +49,53 @@
                     </div>
                 </div>
                 <!-- End Cart List Title -->
-                @foreach ($cart->get() as $item)
-                <!-- Cart Single List list -->
-                <div class="cart-single-list" id="{{ $item->id }}">
-                    <div class="row align-items-center">
-                        <div class="col-lg-1 col-md-1 col-12">
-                            <a href="{{ route('products.show', $item->product->slug) }}">
-                                <img src="{{ $item->product->image_url }}" alt="#"></a>
-                        </div>
-                        <div class="col-lg-4 col-md-3 col-12">
-                            <h5 class="product-name"><a href="{{ route('products.show', $item->product->slug) }}">
-                                    {{ $item->product->name }}</a></h5>
-                            <p class="product-des">
-                                <span><em>Type:</em> Mirrorless</span>
-                                <span><em>Color:</em> Black</span>
-                            </p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <div class="count-input">
-                                <input class="form-control item-quantity" data-id="{{ $item->id }}" value="{{ $item->quantity }}">
-                            </div>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>{{ Currency::format($item->quantity * $item->product->price) }}</p>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-12">
-                            <p>{{ Currency::format(0) }}</p>
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-12">
-                            <a class="remove-item" data-id="{{ $item->id }}" href="javascript:void(0)"><i class="lni lni-close"></i></a>
-                        </div>
+               @foreach ($cart->get() as $item)
+    @php $product = $item->product; @endphp
+
+    @if ($product)
+        <!-- Cart Single List -->
+        <div class="cart-single-list" id="{{ $item->id }}">
+            <div class="row align-items-center">
+                <div class="col-lg-1 col-md-1 col-12">
+                    <a href="{{ route('products.show', $product->slug) }}">
+                        <img src="{{ $product->image_url }}" alt="#"></a>
+                </div>
+                <div class="col-lg-4 col-md-3 col-12">
+                    <h5 class="product-name">
+                        <a href="{{ route('products.show', $product->slug) }}">{{ $product->name }}</a>
+                    </h5>
+                    <p class="product-des">
+                        <span><em>Type:</em> Mirrorless</span>
+                        <span><em>Color:</em> Black</span>
+                    </p>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12">
+                    <div class="count-input">
+                        <input class="form-control item-quantity" data-id="{{ $item->id }}" value="{{ $item->quantity }}">
                     </div>
                 </div>
-                <!-- End Single List list -->
-                @endforeach
+                <div class="col-lg-2 col-md-2 col-12">
+                    <p>{{ Currency::format($item->quantity * $product->price) }}</p>
+                </div>
+                <div class="col-lg-2 col-md-2 col-12">
+                    <p>{{ Currency::format(0) }}</p>
+                </div>
+                <div class="col-lg-1 col-md-2 col-12">
+                    <a class="remove-item" data-id="{{ $item->id }}" href="javascript:void(0)">
+                        <i class="lni lni-close"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- End Single List -->
+    @else
+        <!-- Product missing -->
+        <div class="alert alert-warning">
+            A product in your cart is no longer available.
+        </div>
+    @endif
+@endforeach
+
             </div>
             <div class="row">
                 <div class="col-12">
@@ -110,8 +123,9 @@
                                         <li class="last">You Pay<span>$2531.00</span></li>
                                     </ul>
                                     <div class="button">
-<a href="{{ route('checkout') }}" class="btn">Checkout</a>
-<a href="{{ route('home') }}" class="btn btn-alt">Continue shopping</a>                                    </div>
+<a href="{{ url('/checkout') }}" class="btn">Checkout</a>
+                                        <a href="product-grids.html" class="btn btn-alt">Continue shopping</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

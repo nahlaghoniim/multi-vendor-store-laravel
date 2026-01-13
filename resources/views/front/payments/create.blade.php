@@ -3,15 +3,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 offset-lg-3 col-md-10 offset-md-1 col-12">
-                    <div id="payment-message" style="display: none;" class="alert alert-info"></div>
+                    <div id="payment-message" style="display: none;" class="alert"></div>
 
-                    <form action="" method="post" id="payment-form">
+                    <!-- Payment Element form -->
+                    <div id="payment-form">
                         <div id="payment-element"></div>
-                        <button type="submit" id="submit" class="btn">
+                        <button type="button" id="submit" class="btn" disabled>
                             <span id="button-text">Pay now</span>
                             <span id="spinner" style="display: none;">Processing...</span>
                         </button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,93 +20,100 @@
 
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // This is your test publishable API key.
-        const stripe = Stripe("{{ config('services.stripe.publishable_key') }}");
-
+        const stripe = Stripe("{{ config('services.stripe.key') }}");
         let elements;
 
-        initialize();
-
-        document
-            .querySelector("#payment-form")
-            .addEventListener("submit", handleSubmit);
-
-        // Fetches a payment intent and captures the client secret
+        // Initialize Stripe Payment Element
         async function initialize() {
-            const {
-                clientSecret
-            } = await fetch("{{ route('stripe.paymentIntent.create', $order->id) }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    "_token": "{{ csrf_token() }}"
-                }),
-            }).then((r) => r.json());
+            try {
+const response = await fetch("{{ route('stripe.paymentIntent.create', $order) }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    }
+                });
 
-            elements = stripe.elements({
-                clientSecret
-            });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to create payment intent');
+                }
 
-            const paymentElement = elements.create("payment");
-            paymentElement.mount("#payment-element");
+                const data = await response.json();
+
+                if (!data.clientSecret) {
+                    throw new Error("clientSecret missing from server");
+                }
+
+                // Initialize Stripe elements with Payment Element
+                elements = stripe.elements({ clientSecret: data.clientSecret });
+                const paymentElement = elements.create("payment");
+                paymentElement.mount("#payment-element");
+
+                document.querySelector("#submit").disabled = false;
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showMessage(error.message, 'danger');
+            }
         }
 
-        async function handleSubmit(e) {
-            e.preventDefault();
+        // Handle submit
+        async function handleSubmit() {
             setLoading(true);
 
-            const {
-                error
-            } = await stripe.confirmPayment({
-                elements,
-                confirmParams: {
-                    // Make sure to change this to your payment completion page
-                    return_url: "{{ route('stripe.return', $order->id) }}",
-                },
-            });
+            try {
+                const { error } = await stripe.confirmPayment({
+                    elements,
+                    confirmParams: {
+                        return_url: "{{ route('orders.payments.confirm', $order) }}",
+                    },
+                });
 
-            // This point will only be reached if there is an immediate error when
-            // confirming the payment. Otherwise, your customer will be redirected to
-            // your `return_url`. For some payment methods like iDEAL, your customer will
-            // be redirected to an intermediate site first to authorize the payment, then
-            // redirected to the `return_url`.
-            if (error.type === "card_error" || error.type === "validation_error") {
-                showMessage(error.message);
-            } else {
-                showMessage("An unexpected error occurred.");
+                if (error) {
+                    showMessage(error.message, 'danger');
+                }
+            } catch (err) {
+                console.error('Payment error:', err);
+                showMessage("Unexpected error: " + err.message, 'danger');
             }
 
             setLoading(false);
         }
-        
-        // ------- UI helpers -------
 
-        function showMessage(messageText) {
+        // UI helpers
+        function showMessage(messageText, type = 'info') {
             const messageContainer = document.querySelector("#payment-message");
-
+            messageContainer.className = 'alert alert-' + type;
             messageContainer.style.display = "block";
             messageContainer.textContent = messageText;
 
-            setTimeout(function() {
+            setTimeout(() => {
                 messageContainer.style.display = "none";
-                messageText.textContent = "";
-            }, 4000);
+                messageContainer.textContent = "";
+            }, 5000);
         }
 
-        // Show a spinner on payment submission
         function setLoading(isLoading) {
+            const submitBtn = document.querySelector("#submit");
+            const spinner = document.querySelector("#spinner");
+            const buttonText = document.querySelector("#button-text");
+
             if (isLoading) {
-                // Disable the button and show a spinner
-                document.querySelector("#submit").disabled = true;
-                document.querySelector("#spinner").style.display = "inline";
-                document.querySelector("#button-text").style.display = "none";
+                submitBtn.disabled = true;
+                spinner.style.display = "inline";
+                buttonText.style.display = "none";
             } else {
-                document.querySelector("#submit").disabled = false;
-                document.querySelector("#spinner").style.display = "none";
-                document.querySelector("#button-text").style.display = "inline";
+                submitBtn.disabled = false;
+                spinner.style.display = "none";
+                buttonText.style.display = "inline";
             }
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initialize();
+            document.querySelector("#submit").addEventListener("click", handleSubmit);
+        });
     </script>
 </x-front-layout>
