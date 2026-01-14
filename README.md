@@ -1,270 +1,274 @@
-# Multi-Vendor Store (StoreX)
+# StoreX — Laravel Multi-Vendor E-Commerce Platform
 
-A full-featured multi-vendor e-commerce platform built with Laravel 10. This repository implements a marketplace-style architecture where multiple stores can list products, customers can browse and purchase items, and deliveries are tracked in real-time using maps and websockets.
+A full-featured multi-vendor e-commerce platform built with Laravel 10. StoreX implements a marketplace-style architecture where multiple stores can list products, customers can browse and purchase items, and deliveries are tracked in real-time using maps and websockets.
 
-## Key Features
+## Project Overview
 
-- Multi-vendor architecture: `Store`, `Product`, `Category`, `Tag` models with scoped product queries and store association.
-- Authentication & Authorization:
-  - Laravel Fortify for user registration, login, profile, 2FA, and password reset.
-  - Role-based abilities via `HasRoles` (morphable roles), `Role` and `RoleAbility` models, and Gates defined in `AuthServiceProvider`.
-  - API tokens via Laravel Sanctum with scoped abilities (`AccessTokensController`).
-- Products API: `routes/api.php` exposes `products` resource with paginated listing and guarded create/update/delete actions.
-- Checkout & Orders:
-  StoreX — Laravel Multi-Vendor E-Commerce Platform
+StoreX delivers a scalable backend and storefront for marketplace-style applications. The project emphasizes clean architecture, role-based authorization, API readiness, and real-time delivery tracking with live location updates powered by Leaflet and OpenStreetMap.
 
-  StoreX is a multi-vendor e-commerce platform built with Laravel 10. It provides a marketplace architecture where independent stores can manage products and categories, customers can place orders, payments are processed securely, and delivery locations are tracked in real time.
+## Core Features
 
-  Project Overview
+### Multi-Vendor Architecture
+- Independent stores, each with their own products and categories
+- `Store`, `Product`, `Category`, `Tag` models with scoped product queries
+- Scoped queries to ensure store data isolation
+- Models follow Laravel conventions and clear responsibilities
 
-  StoreX delivers a scalable backend and storefront for marketplace-style applications. The project emphasizes clean architecture, role-based authorization, API readiness, and real-time delivery tracking.
+### Authentication & Authorization
+- **Laravel Fortify** for user authentication (registration, login, password reset, 2FA)
+- **Role-based authorization** with morphable roles (`HasRoles`, `Role`, `RoleAbility` models)
+- Gates defined in `AuthServiceProvider` for fine-grained permissions
+- **Laravel Sanctum** for API authentication with scoped token abilities
 
-  Core Features
+### Products & Orders
+- Product CRUD with RESTful APIs
+- Paginated product listings with filters
+- Order workflow using `Order`, `OrderItem`, `OrderAddress`, and `Payment` models
+- Transactional checkout logic
 
-  Multi-Vendor Architecture
+### Payments
+- **Stripe PHP SDK** integrated
+- Configuration via environment variables (`STRIPE_KEY`, `STRIPE_SECRET`)
+- Ready for webhook expansion with signature verification
 
-  - Independent stores, each with their own products and categories.
-  - Scoped queries to ensure store data isolation.
-  - Models follow Laravel conventions and clear responsibilities.
+### Currency Conversion
+- Centralized currency helper (`App\Helpers\Currency`)
+- Cached exchange rates and session-based currency switching
+- Configurable base currency
 
-  Authentication & Authorization
+### Background Jobs & Scheduling
+- **ImportProducts** job for asynchronous product imports using factories
+- **DeleteExpiredOrders** scheduled cleanup (runs every 6 hours)
+- Queue drivers supported: `sync`, `database`, `redis`
 
-  - Laravel Fortify for user authentication.
-  - Registration, login, password reset, and two-factor authentication (2FA).
-  - Role-based authorization with morphable roles (`Role`, `RoleAbility`).
-  - Gates defined in `AuthServiceProvider`.
-  - API authentication via Laravel Sanctum with scoped token abilities.
+### Real-Time Delivery Tracking
+- **Leaflet** with **OpenStreetMap** tiles for map rendering (no API keys required)
+- **Pusher** and **Laravel Broadcasting** for live delivery location updates
+- `DeliveryLocationUpdated` event broadcasts position changes
+- Frontend updates delivery markers in real-time on order details page
+- Private channel subscription for secure delivery tracking
 
-  Products, Checkout & Orders
+## Tech Stack
 
-  - Product CRUD with RESTful APIs.
-  - Order workflow using `Order`, `OrderItem`, `OrderAddress`, and `Payment` models.
-  - Transactional checkout logic and Stripe integration.
+### Backend
+- PHP 8.1+
+- Laravel 10
+- MySQL
+- Laravel Fortify (authentication)
+- Laravel Sanctum (API tokens)
+- Laravel Broadcasting (real-time events)
 
-  Payments
+### Frontend
+- Blade templates
+- TailwindCSS
+- Alpine.js
+- Vite
 
-  - Stripe PHP SDK integrated.
-  - Configuration via environment variables.
-  - Ready for webhook expansion.
+### APIs & Real-time
+- RESTful APIs
+- Pusher (pusher-php-server + pusher-js)
+- Laravel Echo
 
-  Currency Conversion
+### Payments & Maps
+- Stripe (stripe-php)
+- Leaflet.js
+- OpenStreetMap tiles
 
-  - Centralized currency helper (`App/Helpers/Currency`).
-  - Cached exchange rates and session-based currency switching.
-
-  Background Jobs & Scheduling
-
-  - `ImportProducts` job for asynchronous product imports.
-  - `DeleteExpiredOrders` scheduled cleanup (every 6 hours).
-  - Queue drivers supported: `sync`, `database`, `redis`.
-
-  Real-Time Delivery Tracking
-
-  - Leaflet with OpenStreetMap tiles for map rendering (no API keys required).
-  - Pusher and Laravel Broadcasting for live updates.
-  - Delivery marker updates on the order details page.
-
-  Architecture Highlights
-
-  - Multi-store separation enforced via policies and gates.
-  - Service and helper layers for reusable business logic.
-  - Event-driven design with broadcasting for delivery updates.
-  - Background processing using queues and scheduler for scalability.
-
-  Tech Stack
-
-  Backend
-
-  - PHP 8.1+
-  - Laravel 10
-  - MySQL
-
-  Frontend
-
-  - Blade templates
-  - TailwindCSS
-  - Alpine.js
-  - Vite
-
-  APIs & Realtime
-
-  - Laravel Sanctum
-  - Laravel Broadcasting
-  - Pusher
-
-  Payments & Maps
-
-  - Stripe (`stripe-php`)
-  - Leaflet + OpenStreetMap
-
-  Installation & Setup
-
-  Prerequisites
-
-  - PHP 8.1+
-  - Composer
-  - Node.js & npm
-  - MySQL
-
-  Quick Start
-
-  ```bash
-  # Clone repository
-  git clone https://github.com/nahlaghoniim/multi-vendor-store-laravel.git storex
-  cd storex
-
-  # Install dependencies
-  composer install
-  npm install
-
-  # Environment setup
-  cp .env.example .env
-  php artisan key:generate
-  php artisan storage:link
-
-  # Configure .env
-  # DB_*
-  # STRIPE_KEY, STRIPE_SECRET
-  # PUSHER_*
-  # QUEUE_CONNECTION=database|redis
-
-  # Run migrations & seeders
-  php artisan migrate --seed
-
-  # Build frontend assets
-  npm run dev
-
-  # Optional: background services
-  php artisan queue:work
-  php artisan schedule:work
-  ```
-
-  Usage
-
-  Frontend
-
-  - Browse products and categories.
-  - Place orders through checkout.
-  - Track delivery in real time using `resources/views/front/orders/show.blade.php`.
-
-  API Usage (Sanctum)
-
-  - Generate token: `POST /api/auth/access-tokens`.
-  - Create product (authorized): `POST /api/products` with `Authorization: Bearer <TOKEN>`.
-
-  Delivery Tracking Flow
-
-  - Delivery updates location in backend.
-  - `DeliveryLocationUpdated` event is fired and broadcast via Pusher.
-  - Frontend listens on `private-deliveries.{orderId}` and updates the Leaflet marker in real time.
-
-  API Endpoints Overview
-
-  - `GET /api/products`
-  - `GET /api/products/{id}`
-  - `POST /api/products` (requires ability)
-  - `POST /api/auth/access-tokens`
-  - `GET|PUT /api/deliveries/{delivery}`
-
-  Important Files
-
-  - `app/Models/Store.php`
-  - `app/Models/Product.php`
-  - `app/Helpers/Currency.php`
-  - `app/Events/DeliveryLocationUpdated.php`
-  - `routes/api.php`
-  - `resources/views/front/orders/show.blade.php`
-
-  Future Improvements
-
-  - Stripe webhook handling and signature verification.
-  - Admin UI for role and ability management.
-  - Additional payment gateways.
-  - Advanced analytics and reporting.
-  - Expanded test coverage for APIs, queues, and broadcasting.
-
-  Credits & Attributions
-
-  - Laravel — https://laravel.com
-  - Leaflet — https://leafletjs.com
-  - OpenStreetMap — https://www.openstreetmap.org
-  - Stripe — https://stripe.com
-  - Pusher — https://pusher.com
-
-- **Job Example**: `ImportProducts` job creates products in the background using factories.
-- **Queue Driver**: Configured to use Redis for queue management.
-- **Scheduler**: The `DeleteExpiredOrders` job runs every six hours to clean up expired orders.
-
-## API & Sanctum Usage
-- **Endpoints**:
-  - `GET /api/products`: Fetch all products.
-  - `POST /api/auth/access-tokens`: Generate an access token.
-  - `DELETE /api/auth/access-tokens/{token}`: Revoke an access token.
-- **Middleware**: Sanctum middleware secures API routes.
+### Queues & Jobs
+- Laravel Queues (sync/database/redis)
+- Laravel Scheduler
 
 ## Installation & Setup
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd store
-   ```
-3. Install PHP dependencies:
-   ```bash
-   composer install
-   ```
-4. Install JavaScript dependencies:
-   ```bash
-   npm install
-   ```
-5. Copy the `.env` file:
-   ```bash
-   cp .env.example .env
-   ```
-6. Generate the application key:
-   ```bash
-   php artisan key:generate
-   ```
-7. Configure the `.env` file with your database and other environment settings.
-8. Run migrations and seeders:
-   ```bash
-   php artisan migrate --seed
-   ```
-9. Start the development server:
-   ```bash
-   php artisan serve
-   ```
-10. Build frontend assets:
-    ```bash
-    npm run dev
-    ```
 
-## Environment Variables
-Key environment variables include:
-- `APP_NAME`, `APP_ENV`, `APP_KEY`, `APP_URL`
-- `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`
-- `QUEUE_CONNECTION` (e.g., `sync`, `redis`)
-- `MAIL_MAILER`, `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`
+### Prerequisites
+- PHP 8.1+
+- Composer
+- Node.js & npm
+- MySQL (or supported database)
 
-## Queue & Scheduler Setup Commands
-- Start the queue worker:
-  ```bash
-  php artisan queue:work
-  ```
-- Run the scheduler:
-  ```bash
-  php artisan schedule:work
-  ```
+### Quick Start
 
-## Notes for Future Improvements
-- Implement advanced reporting and analytics for store performance.
-- Add support for payment gateways like PayPal and Stripe.
-- Enhance the frontend with a modern JavaScript framework like Vue.js or React.
-- Optimize database queries for large-scale data handling.
-- Improve test coverage for critical features.
+```bash
+# Clone repository
+git clone https://github.com/nahlaghoniim/multi-vendor-store-laravel.git storex
+cd storex
+
+# Install dependencies
+composer install
+npm install
+
+# Environment setup
+cp .env.example .env
+php artisan key:generate
+php artisan storage:link
+
+# Configure .env with your settings:
+# - DB_* (database credentials)
+# - STRIPE_KEY, STRIPE_SECRET
+# - PUSHER_APP_ID, PUSHER_APP_KEY, PUSHER_APP_SECRET, PUSHER_APP_CLUSTER
+# - BROADCAST_DRIVER=pusher
+# - QUEUE_CONNECTION=database (or redis for production)
+
+# Run migrations & seeders
+php artisan migrate --seed
+
+# Build frontend assets
+npm run dev
+
+# Start development server
+php artisan serve
+
+# Optional: Run background services
+php artisan queue:work --tries=3
+php artisan schedule:work
+```
+
+### Production Notes
+- Set `QUEUE_CONNECTION=redis` or `database` (avoid `sync` in production)
+- Use a process manager like Supervisor to keep `queue:work` running
+- Configure cron to run `php artisan schedule:run` every minute
+- Replace example Pusher and Stripe keys with production credentials
+
+## Usage
+
+### Frontend
+- Browse products and categories via storefront routes (`resources/views/front`)
+- Add items to cart and complete checkout
+- Track delivery in real-time on order details page (`resources/views/front/orders/show.blade.php`)
+
+### API Usage (Sanctum)
+
+#### Generate Access Token
+```bash
+curl -X POST https://your-app.test/api/auth/access-tokens \
+  -d 'email=admin@example.test' \
+  -d 'password=secret' \
+  -d 'device_name=cli'
+```
+
+#### Create Product (Authorized)
+```bash
+curl -H "Authorization: Bearer <TOKEN>" \
+  -X POST https://your-app.test/api/products \
+  -d 'name=New Product' \
+  -d 'price=99.95' \
+  -d 'category_id=1'
+```
+
+### Delivery Tracking Flow
+
+1. `Delivery` model is linked to `Order` via `order_id`
+2. When delivery location updates, backend fires `DeliveryLocationUpdated` event
+3. Event is broadcast via Pusher to channel `private-deliveries.{orderId}`
+4. Frontend (Leaflet map) subscribes to the channel using Laravel Echo
+5. Map marker position updates in real-time as delivery moves
+
+**Important**: Add channel authorization in `routes/channels.php`:
+```php
+Broadcast::channel('deliveries.{orderId}', function ($user, $orderId) {
+    return $user->orders()->where('id', $orderId)->exists();
+});
+```
+
+## API Endpoints Overview
+
+| Method | Endpoint | Description | Auth Required |
+|--------|----------|-------------|---------------|
+| GET | `/api/products` | List all products (paginated) | No |
+| GET | `/api/products/{id}` | Get product details | No |
+| POST | `/api/products` | Create new product | Yes (Sanctum + ability) |
+| POST | `/api/auth/access-tokens` | Generate API token | No (credentials required) |
+| DELETE | `/api/auth/access-tokens/{token}` | Revoke API token | Yes (Sanctum) |
+| GET | `/api/deliveries/{delivery}` | Get delivery details | Yes |
+| PUT | `/api/deliveries/{delivery}` | Update delivery location | Yes |
+
+See `routes/api.php` and `app/Http/Controllers/Api` for full implementation.
+
+## Background Jobs & Queues
+
+### DeleteExpiredOrders
+- Runs every 6 hours via Laravel Scheduler
+- Removes pending orders older than 7 days
+- Configured in `app/Console/Kernel.php`
+
+### ImportProducts
+- Queued job that creates products using factories
+- Demonstrates batch processing and queue usage
+- Useful for bulk imports
+
+### Queue Configuration
+```bash
+# Development (synchronous)
+QUEUE_CONNECTION=sync
+
+# Production (asynchronous)
+QUEUE_CONNECTION=database  # or redis
+
+# Start queue worker
+php artisan queue:work --tries=3 --timeout=90
+
+# Run scheduler
+php artisan schedule:work
+```
+
+## Architecture Highlights
+
+- **Multi-store separation** enforced via policies and gates
+- **Service and helper layers** for reusable business logic
+- **Event-driven design** with broadcasting for real-time updates
+- **Background processing** using queues and scheduler for scalability
+- **API-first approach** with Sanctum for secure token-based authentication
+- **Localization support** via Mcamara Laravel Localization package
+
+## Important Files
+
+| File | Purpose |
+|------|---------|
+| `app/Models/Store.php` | Store model and relationships |
+| `app/Models/Product.php` | Product model with scopes |
+| `app/Models/Delivery.php` | Delivery tracking model |
+| `app/Helpers/Currency.php` | Currency conversion helper |
+| `app/Events/DeliveryLocationUpdated.php` | Real-time delivery broadcast event |
+| `app/Jobs/DeleteExpiredOrders.php` | Scheduled cleanup job |
+| `app/Jobs/ImportProducts.php` | Queued product import job |
+| `routes/api.php` | API route definitions |
+| `routes/channels.php` | Broadcast channel authorizations |
+| `resources/views/front/orders/show.blade.php` | Real-time delivery tracking page |
+
+## Future Improvements
+
+- Add Stripe webhook handling with signature verification (`STRIPE_WEBHOOK_SECRET`)
+- Create admin UI for role and ability management with audit logs
+- Add support for additional payment gateways (PayPal, local gateways)
+- Implement multi-currency price handling at product/store level
+- Add advanced analytics and reporting dashboards
+- Expand test coverage for APIs, broadcasting, queues, and scheduled jobs
+- Optimize database queries for large-scale deployments
+- Enhance frontend with Vue.js or React for richer interactivity
+
+## Credits & Attributions
+
+- **Laravel** — https://laravel.com
+- **Leaflet** — https://leafletjs.com (map library)
+- **OpenStreetMap** — https://www.openstreetmap.org (map tiles)
+- **Stripe** — https://stripe.com (payment processing)
+- **Pusher** — https://pusher.com (real-time websockets)
+- **TailwindCSS** — https://tailwindcss.com (styling)
+- **Alpine.js** — https://alpinejs.dev (JavaScript framework)
+
+## Contributing
+
+This project is actively maintained and open to contributions. Feel free to:
+- Submit issues for bugs or feature requests
+- Create pull requests with improvements
+- Suggest architectural enhancements
+- Report security vulnerabilities privately
+
+## License
+
+This project is open-source software licensed under the MIT license.
 
 ---
 
-This project is actively maintained and open to contributions. Feel free to submit issues or pull requests to improve the functionality.
+© Project scaffold and implementation by the repository author.
+
