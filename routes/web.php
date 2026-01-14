@@ -18,50 +18,54 @@ Route::group([
     'prefix' => LaravelLocalization::setLocale(),
 ], function() {
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
-Route::get('/products/{product:slug}', [ProductsController::class, 'show'])->name('products.show');
+    Route::get('/products', [ProductsController::class, 'index'])->name('products.index');
+    Route::get('/products/{product:slug}', [ProductsController::class, 'show'])->name('products.show');
 
-Route::resource('cart', CartController::class);
+    Route::resource('cart', CartController::class);
 
- Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
+    Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('checkout', [CheckoutController::class, 'store']);
-  
-Route::post('/currency/change', [CurrencyConverterController::class, 'store'])
-    ->name('currency.change');Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::post('/currency/change', [CurrencyConverterController::class, 'store'])
+        ->name('currency.change');
+
+    Route::middleware('auth')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+        
+        // ✅ Payment routes (specific - must come first)
+        Route::get('orders/{order}/payments/create', [PaymentsController::class, 'create'])
+            ->name('orders.payments.create');
+        
+        Route::post('orders/{order}/payments/stripe-intent', [PaymentsController::class, 'stripeIntent'])
+            ->name('stripe.paymentIntent.create');
+        
+        Route::get('orders/{order}/payments/confirm', [PaymentsController::class, 'confirm'])
+            ->name('orders.payments.confirm');
+        
+        // ✅ Order routes (generic)
+        Route::post('orders', [OrdersController::class, 'store'])
+            ->name('orders.store');
+        
+        Route::get('orders/{order}', [OrdersController::class, 'show'])
+            ->name('orders.show');
+    });
+
+    Route::get('/auth/user/2fa', [TwoFactorAuthenticationController::class, 'index'])
+        ->name('front.2fa');
+    
+    // Social Auth
+    Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
+    Route::get('login/facebook', [SocialAuthController::class, 'redirectToFacebook']);
+    Route::get('login/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
+
+    require __DIR__ . '/dashboard.php';
 });
-Route::get('/auth/user/2fa', [TwoFactorAuthenticationController::class, 'index'])
-    ->name('front.2fa');
-   // Redirect user to Google
-Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle'])->name('auth.google');
 
-// Handle callback from Google
-Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
-Route::get('login/facebook', [SocialAuthController::class, 'redirectToFacebook']);
-Route::get('login/facebook/callback', [SocialAuthController::class, 'handleFacebookCallback']);
-Route::prefix(LaravelLocalization::setLocale())->group(function () {
-
-    // Show payment page
-    Route::get('/orders/{order}/payments/create', [PaymentsController::class, 'create'])
-        ->name('orders.payments.create');
-
-    // Create Stripe PaymentIntent
-   Route::post('orders/{order}/payments/stripe-intent', [PaymentsController::class, 'stripeIntent'])
-    ->name('stripe.paymentIntent.create');
-
-    // Confirm payment (redirect after success)
-    Route::get('/orders/{order}/payments/confirm', [PaymentsController::class, 'confirm'])
-        ->name('orders.payments.confirm');
-        Route::post('/orders', [OrdersController::class, 'store'])->name('orders.store');
-        Route::post('/stripe/webhook', [StripeWebhooksController::class, 'handle']);
-
-
-});
-
-//require __DIR__.'/auth.php';
-require __DIR__ . '/dashboard.php';
-});
+// Stripe webhook (outside localization and auth)
+Route::post('stripe/webhook', [StripeWebhooksController::class, 'handle'])
+    ->name('stripe.webhook');

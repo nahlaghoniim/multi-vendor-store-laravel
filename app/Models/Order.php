@@ -115,7 +115,10 @@ class Order extends Model
     {
         return $this->status === 'paid' || $this->payment_status === 'paid';
     }
-
+ public function delivery()
+    {
+        return $this->hasOne(Delivery::class);
+    }
     protected static function booted()
     {
         static::creating(function(Order $order) {

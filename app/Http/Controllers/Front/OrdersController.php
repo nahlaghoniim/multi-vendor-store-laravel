@@ -10,18 +10,26 @@ use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
 {
-    public function show(Order $order)
+     public function show(Order $order)
     {
-        $delivery = $order->delivery()->select([
-            'id',
-            'order_id',
-            'status',
-            DB::raw("ST_Y(current_location) AS lat"),
-            DB::raw("ST_X(current_location) AS lng"),
-        ])->first();
+        // Make sure user owns this order
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        // Get delivery with the new column names
+        $delivery = $order->delivery()
+            ->select([
+                'id',
+                'order_id',
+                'status',
+                'latitude as lat',
+                'longitude as lng',
+                'created_at',
+                'updated_at',
+            ])
+            ->first();
 
         return view('front.orders.show', [
-            'order' => $order,
+            'order' => $order->load(['items.product', 'billingAddress', 'shippingAddress']),
             'delivery' => $delivery,
         ]);
     }
