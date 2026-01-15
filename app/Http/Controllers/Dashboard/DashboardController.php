@@ -1,32 +1,35 @@
 <?php
-
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\DB;
+use App\Models\Product;
 
 class DashboardController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware(['auth'])->only('index');
     }
 
-    // Actions
-    public function index()
-    {
-        $title = 'Store';
+  public function index()
+{
+    $user = Auth::user();
+    $title = 'Store';
 
-        $user = Auth::user();
-        
-        // Return response: view, josn, redirect, file
-        
-        return view('dashboard.index', [
-            'user' => 'Nahla',
-            'title' => $title
-        ]);
-    }
+    $topProducts = Product::withCount('orderItems')
+        ->select('products.*', DB::raw('SUM(order_items.price * order_items.quantity) as total_sales'))
+        ->leftJoin('order_items', 'products.id', '=', 'order_items.product_id')
+        ->groupBy('products.id')
+        ->orderByDesc('total_sales')
+        ->take(5)
+        ->get();
+
+    return view('dashboard.index', [
+        'user' => $user,
+        'title' => $title,
+        'topProducts' => $topProducts
+    ]);
+}
 }

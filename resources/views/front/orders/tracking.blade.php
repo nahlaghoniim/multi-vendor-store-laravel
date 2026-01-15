@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <x-front-layout title="Order Tracking">
 
     <x-slot:breadcrumb>
@@ -124,3 +123,15 @@
     @endif
 
 </x-front-layout>
+```
+
+**Steps to create the file:**
+
+1. Navigate to `resources/views/front/orders/`
+2. Create a new file called `tracking.blade.php`
+3. Paste the code above
+4. Save the file
+
+Now refresh your browser and visit:
+```
+http://127.0.0.1:8000/en/orders/83/tracking

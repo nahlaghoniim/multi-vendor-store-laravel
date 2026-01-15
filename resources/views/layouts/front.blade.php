@@ -127,9 +127,10 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
-                            <img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo">
-                        </a>
+<a class="navbar-brand" href="{{ route('home') }}">
+    <img src="{{ asset('assets/images/logo/logos.png') }}" alt="Logo">
+</a>
+
                         <!-- End Header Logo -->
                     </div>
                     <div class="col-lg-5 col-md-7 d-xs-none">
@@ -232,7 +233,7 @@
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                 <ul id="nav" class="navbar-nav ms-auto">
                                     <li class="nav-item">
-                                        <a href="index.html" aria-label="Toggle navigation">Home</a>
+<a href="{{ route('home') }}" aria-label="Toggle navigation">{{ __('Home') }}</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="dd-menu active collapsed" href="javascript:void(0)"

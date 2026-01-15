@@ -9,7 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrdersController extends Controller
+
 {
+    public function index()
+{
+    $orders = Order::where('user_id', auth()->id())->latest()->get();
+    return view('front.orders.index', compact('orders'));
+}
      public function show(Order $order)
     {
         // Make sure user owns this order
@@ -89,5 +95,30 @@ class OrdersController extends Controller
             return back()->with('error', 'Failed to create order');
 
         }
+    }
+     public function tracking(Order $order)
+    {
+        // Make sure user owns this order
+        abort_if($order->user_id !== auth()->id(), 403);
+
+        // Refresh to get latest data
+        $order = $order->fresh(['delivery']);
+
+        // Get delivery with aliased column names for the view
+        $delivery = null;
+        
+        if ($order->delivery) {
+            $delivery = (object) [
+                'id' => $order->delivery->id,
+                'order_id' => $order->delivery->order_id,
+                'status' => $order->delivery->status,
+                'lat' => $order->delivery->latitude,
+                'lng' => $order->delivery->longitude,
+                'created_at' => $order->delivery->created_at,
+                'updated_at' => $order->delivery->updated_at,
+            ];
+        }
+
+        return view('front.orders.tracking', compact('order', 'delivery'));
     }
 }

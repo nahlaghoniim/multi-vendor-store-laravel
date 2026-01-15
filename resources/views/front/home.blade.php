@@ -12,35 +12,43 @@
                             <!-- Start Single Slider -->
                             <div class="single-slider"
 style="background-image: url('{{ asset('images/hero/slider-bg2.png') }}');" >
-                                <div class="content">
-                                    <h2><span>No restocking fee ($35 savings)</span>
-                                        M75 Sport Watch
-                                    </h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut
-                                        labore dolore magna aliqua.</p>
-                                    <h3><span>Now Only</span> $320.99</h3>
-                                    <div class="button">
-                                        <a href="product-grids.html" class="btn">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Single Slider -->
-                            <!-- Start Single Slider -->
-                            <div class="single-slider"
-style="background-image: url('{{ asset('images/hero/slider-bg1.png') }}');" >
-                                <div class="content">
-                                    <h2><span>Big Sale Offer</span>
-                                        Get the Best Deal on CCTV Camera
-                                    </h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut
-                                        labore dolore magna aliqua.</p>
-                                    <h3><span>Combo Only:</span> $590.00</h3>
-                                    <div class="button">
-                                        <a href="product-grids.html" class="btn">Shop Now</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End Single Slider -->
+                          <div class="content">
+            <h2>
+                <span>No restocking fee ({{ \App\Helpers\Currency::format(35) }} savings)</span>
+                M75 Sport Watch
+            </h2>
+            <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut
+                labore dolore magna aliqua.</p>
+            <h3>
+                <span>Now Only</span>
+                <span class="product-price">{{ \App\Helpers\Currency::format(100) }}</span>
+            </h3>
+            <div class="button">
+                <a href="product-grids.html" class="btn">Shop Now</a>
+            </div>
+        </div>
+    </div>
+    <!-- End Single Slider -->
+                      <!-- Start Single Slider -->
+    <div class="single-slider"
+         style="background-image: url('{{ asset('images/hero/slider-bg1.png') }}');">
+        <div class="content">
+            <h2>
+                <span>Big Sale Offer</span>
+                Get the Best Deal on CCTV Camera
+            </h2>
+            <p>Lorem ipsum dolor sit amet, consectetur elit, sed do eiusmod tempor incididunt ut
+                labore dolore magna aliqua.</p>
+            <h3>
+                <span>Combo Only:</span>
+                <span class="product-price">{{ \App\Helpers\Currency::format(590) }}</span>
+            </h3>
+            <div class="button">
+                <a href="product-grids.html" class="btn">Shop Now</a>
+            </div>
+        </div>
+    </div>
+    <!-- End Single Slider -->
                         </div>
                         <!-- End Hero Slider -->
                     </div>
@@ -56,7 +64,7 @@ style="background-image: url('{{ asset('images/hero/iphone.png') }}');" >
                                         <span>New line required</span>
                                         iPhone 12 Pro Max
                                     </h2>
-                                    <h3>$259.99</h3>
+                    <h3 class="product-price">{{ \App\Helpers\Currency::format(259.99) }}</h3>
                                 </div>
                             </div>
                             <!-- End Small Banner -->

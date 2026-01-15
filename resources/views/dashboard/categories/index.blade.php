@@ -30,7 +30,6 @@
 <table class="table">
     <thead>
         <tr>
-            <th></th>
             <th>ID</th>
             <th>Name</th>
             <th>Parent</th>
@@ -43,13 +42,6 @@
     <tbody>
         @forelse($categories as $category)
         <tr>
-            <td>
-                @if($category->image)
-                    <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}" height="50">
-                @else
-                    <span class="text-muted">—</span>
-                @endif
-            </td>
             <td>{{ $category->id }}</td>
             <td>{{ $category->name }}</td>
             <td>{{ $category->parent?->name ?? '—' }}</td>
@@ -69,11 +61,12 @@
         </tr>
         @empty
         <tr>
-            <td colspan="9">No categories defined.</td>
+            <td colspan="8">No categories defined.</td>
         </tr>
         @endforelse
     </tbody>
 </table>
+
 
 {{ $categories->withQueryString()->links() }}
 

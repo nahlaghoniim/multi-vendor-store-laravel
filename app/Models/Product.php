@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -36,6 +39,15 @@ class Product extends Model
             }
         });
     }
+
+   public function getActivitylogOptions(): LogOptions
+{
+    return LogOptions::defaults()
+        ->useLogName('product')
+        ->logOnly(['name', 'price', 'compare_price', 'status', 'category_id', 'store_id'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+}
 
     /* ------------------------------
         Route Model Binding (SLUG)
@@ -93,4 +105,21 @@ class Product extends Model
 
     return asset('storage/' . $this->image);
 }
+public function scopeFilter($query, $filters)
+{
+    if (!empty($filters['name'])) {
+        $query->where('name', 'like', '%' . $filters['name'] . '%');
+    }
+
+    if (isset($filters['status']) && $filters['status'] !== '') {
+        $query->where('status', $filters['status']);
+    }
+
+    return $query;
+}
+ public function orderItems(): HasMany
+    {
+        return $this->hasMany(\App\Models\OrderItem::class);
+    }
+
 }

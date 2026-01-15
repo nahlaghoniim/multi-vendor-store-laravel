@@ -5,10 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'store_id', 
@@ -147,4 +149,12 @@ class Order extends Model
         }
         return $year . '0001';
     }
+     public function getActivitylogOptions(): LogOptions
+{
+    return LogOptions::defaults()
+        ->useLogName('product')
+        ->logOnly(['name', 'price', 'compare_price', 'status', 'category_id', 'store_id'])
+        ->logOnlyDirty()
+        ->dontSubmitEmptyLogs();
+}
 }

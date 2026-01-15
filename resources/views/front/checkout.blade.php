@@ -113,8 +113,8 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="single-form button">
-                                                    <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">next
-                                                        step</button>
+                                                   <button type="button" class="btn" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">next step</button>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -201,7 +201,7 @@
                                                         <div class="single-payment-option">
                                                             <input type="radio" name="shipping" checked id="shipping-1">
                                                             <label for="shipping-1">
-                                                                <img src="https://via.placeholder.com/60x32" alt="Sipping">
+<img src="{{ asset('images/shipping/ups.png') }}" alt="UPS" width="60" height="32">
                                                                 <p>Standerd Shipping</p>
                                                                 <span class="price">$10.50</span>
                                                             </label>
@@ -209,7 +209,7 @@
                                                         <div class="single-payment-option">
                                                             <input type="radio" name="shipping" id="shipping-2">
                                                             <label for="shipping-2">
-                                                                <img src="https://via.placeholder.com/60x32" alt="Sipping">
+<img src="{{ asset('images/shipping/fedex.png') }}" alt="FedEx" width="60" height="32">
                                                                 <p>Standerd Shipping</p>
                                                                 <span class="price">$10.50</span>
                                                             </label>
@@ -217,7 +217,7 @@
                                                         <div class="single-payment-option">
                                                             <input type="radio" name="shipping" id="shipping-3">
                                                             <label for="shipping-3">
-                                                                <img src="https://via.placeholder.com/60x32" alt="Sipping">
+<img src="{{ asset('images/shipping/dhl.png') }}" alt="DHL" width="60" height="32">
                                                                 <p>Standerd Shipping</p>
                                                                 <span class="price">$10.50</span>
                                                             </label>
@@ -225,7 +225,7 @@
                                                         <div class="single-payment-option">
                                                             <input type="radio" name="shipping" id="shipping-4">
                                                             <label for="shipping-4">
-                                                                <img src="https://via.placeholder.com/60x32" alt="Sipping">
+<img src="{{ asset('images/shipping/usps.png') }}" alt="USPS" width="60" height="32">
                                                                 <p>Standerd Shipping</p>
                                                                 <span class="price">$10.50</span>
                                                             </label>
@@ -235,9 +235,20 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="steps-form-btn button">
-                                                    <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">previous</button>
-                                                    <a href="javascript:void(0)" class="btn btn-alt">Save & Continue</a>
-                                                </div>
+    <!-- Previous Step Button -->
+    <button class="btn" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Previous
+    </button>
+
+    <!-- Save & Continue Button -->
+    <button type="button" class="btn btn-alt"
+            data-bs-toggle="collapse" 
+            data-bs-target="#collapsefive" 
+            aria-expanded="false" 
+            aria-controls="collapsefive">
+        Save & Continue
+    </button>
+</div>
                                             </div>
                                         </div>
                                     </section>
@@ -305,7 +316,7 @@
                         </div>
                         <div class="checkout-sidebar-banner mt-30">
                             <a href="product-grids.html">
-                                <img src="https://via.placeholder.com/400x330" alt="#">
+                                {{-- <img src="https://via.placeholder.com/400x330" alt="#"> --}}
                             </a>
                         </div>
                     </div>

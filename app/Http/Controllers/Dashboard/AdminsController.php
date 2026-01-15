@@ -6,118 +6,105 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AdminsController extends Controller
 {
-
     public function __construct()
     {
-        $this->authorizeResource(Admin::class, 'admin');    
+        $this->authorizeResource(Admin::class, 'admin');
     }
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $admins = Admin::paginate();
+        $admins = Admin::paginate(10); // better to limit per page
         return view('dashboard.admins.index', compact('admins'));
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
+        $roles = Role::all();
         return view('dashboard.admins.create', [
-          //  'roles' => Role::all(),
             'admin' => new Admin(),
+            'roles' => $roles,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'roles' => 'required|array',
-        ]);
+{
+    // 1. Validate only the fields we actually want
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:admins,email',
+        'password' => 'required|string|min:8|confirmed',
+        'phone_number' => 'nullable|string|max:20',
+        'super_admin' => 'nullable|boolean',
+        'status' => 'nullable|boolean',
+        'roles' => 'required|array',
+    ]);
 
-        $admin = Admin::create($request->all());
-        $admin->roles()->attach($request->roles);
+    // 2. Only pick the fields that exist in $fillable
+    $adminData = $request->only([
+        'name', 'email', 'password', 'phone_number', 'super_admin', 'status'
+    ]);
 
-        return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin created successfully');
+    // 3. Hash the password before storing
+    $adminData['password'] = bcrypt($adminData['password']);
+
+    // 4. Create the admin
+    $admin = Admin::create($adminData);
+
+    // 5. Attach roles safely
+    $admin->roles()->attach($request->roles);
+
+    return redirect()
+        ->route('dashboard.admins.index')
+        ->with('success', 'Admin created successfully');
+}
+
+public function update(Request $request, Admin $admin)
+{
+    // 1. Validate the fields
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:admins,email,' . $admin->id,
+        'password' => 'nullable|string|min:8|confirmed',
+        'phone_number' => 'nullable|string|max:20',
+        'super_admin' => 'nullable|boolean',
+        'status' => 'nullable|boolean',
+        'roles' => 'required|array',
+    ]);
+
+    // 2. Only pick the fields that exist in $fillable
+    $adminData = $request->only([
+        'name', 'email', 'password', 'phone_number', 'super_admin', 'status'
+    ]);
+
+    // 3. Hash password if provided
+    if (!empty($adminData['password'])) {
+        $adminData['password'] = bcrypt($adminData['password']);
+    } else {
+        unset($adminData['password']); // keep old password if not updated
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    // 4. Update admin
+    $admin->update($adminData);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
-    {
-        $roles = Role::all();
-        $admin_roles = $admin->roles()->pluck('id')->toArray();
-        
-        return view('dashboard.admins.edit', compact('admin', 'roles', 'admin_roles'));
-    }
+    // 5. Sync roles safely
+    $admin->roles()->sync($request->roles);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Admin $admin)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'roles' => 'required|array',
-        ]);
-        
-        $admin->update($request->all());
-        $admin->roles()->sync($request->roles);
-        
-        return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin updated successfully');
-    }
+    return redirect()
+        ->route('dashboard.admins.index')
+        ->with('success', 'Admin updated successfully');
+}
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        Admin::destroy($id);
-        return redirect()
-            ->route('dashboard.admins.index')
-            ->with('success', 'Admin deleted successfully');
-    }
 }

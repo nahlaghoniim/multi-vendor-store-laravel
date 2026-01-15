@@ -27,6 +27,9 @@ class OrderItem extends Pivot
     {
         return $this->belongsTo(Order::class);
     }
-
+public function getTotalAttribute()
+    {
+        return $this->price * $this->quantity;
+    }
 
 }

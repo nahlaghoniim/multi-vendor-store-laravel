@@ -15,11 +15,14 @@
         <div class="dropdown-divider"></div>
         <div id="notification-items">
             @foreach($notifications as $notification)
-                <a href="{{ $notification->data['url'] }}?notification_id={{ $notification->id }}"
-                   class="dropdown-item text-wrap @if ($notification->unread()) text-bold @endif"
+                <a href="{{ route('dashboard.index') }}?notification_id={{ $notification->id }}"
+                   class="dropdown-item text-wrap @if ($notification->read_at === null) text-bold @endif"
                    data-id="{{ $notification->id }}">
-                    <i class="{{ $notification->data['icon'] }} mr-2"></i> {{ $notification->data['body'] }}
-                    <span class="float-right text-muted text-sm">{{ $notification->created_at->longAbsoluteDiffForHumans() }}</span>
+                    <i class="{{ $notification->data['icon'] }} mr-2"></i> 
+                    {{ $notification->data['body'] }}
+                    <span class="float-right text-muted text-sm">
+                        {{ $notification->created_at->longAbsoluteDiffForHumans() }}
+                    </span>
                 </a>
                 <div class="dropdown-divider"></div>
             @endforeach

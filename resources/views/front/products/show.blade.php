@@ -31,13 +31,13 @@
                                 <div class="main-img">
                                     <img src="{{ $product->image_url }}" id="current" alt="#">
                                 </div>
-                                <div class="images">
+                                {{-- <div class="images">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
                                     <img src="https://via.placeholder.com/1000x670" class="img" alt="#">
-                                </div>
+                                </div> --}}
                             </main>
                         </div>
                     </div>

@@ -1,33 +1,29 @@
 <?php
+
 namespace App\View\Components\Dashboard;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
-use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationsMenu extends Component
 {
-    /** @var \Illuminate\Support\Collection<int, DatabaseNotification> */
     public $notifications;
-
-    /** @var int */
     public $newCount;
 
     public function __construct(int $count = 10)
     {
-        /** @var \App\Models\User|null $user */
-        $user = Auth::user();
+        // Get logged-in admin
+        $admin = Auth::guard('admin')->user();
 
-        if (! $user) {
+        if (!$admin) {
             $this->notifications = collect();
             $this->newCount = 0;
             return;
         }
 
-        // Use unreadNotifications() with () to get query builder
-        $this->notifications = $user
-            ->unreadNotifications()
-            ->latest()
+        // Get unread notifications from query builder
+        $this->notifications = $admin->unreadNotifications() // <- method, not property
+            ->orderBy('created_at', 'desc')
             ->limit($count)
             ->get();
 

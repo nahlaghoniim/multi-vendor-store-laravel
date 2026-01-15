@@ -8,26 +8,20 @@ use NumberFormatter;
 
 class Currency
 {
-    public function __invoke(...$params)
-    {
-        return static::format(...$params);
-    }
-
     public static function format($amount, $currency = null)
     {
         $baseCurrency = config('app.currency', 'USD');
 
-        $formatter = new NumberFormatter(config('app.locale'), NumberFormatter::CURRENCY);
-        
-        if ($currency === null) {
-            $currency = Session::get('currency_code', $baseCurrency);
-        }
+        $currency = $currency ?? Session::get('currency_code', $baseCurrency);
 
-        if ($currency != $baseCurrency) {
-            $rate = Cache::get('currency_rate_' . $currency, 1);
-            $amount = $amount * $rate;
-        }
+        $cacheKey = "currency_rate_{$baseCurrency}_{$currency}";
 
-        return $formatter->formatCurrency($amount, $currency);
+        $rate = Cache::get($cacheKey, 1);
+
+        $convertedAmount = $amount * $rate;
+
+        $formatter = new NumberFormatter(config('app.locale', 'en_US'), NumberFormatter::CURRENCY);
+
+        return $formatter->formatCurrency($convertedAmount, $currency);
     }
 }

@@ -10,14 +10,18 @@ use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
-    public function index()
-    {
-        $this->authorize('view-any', Product::class);
+   public function index(Request $request)
+{
+    $this->authorize('view-any', Product::class);
 
-        $products = Product::with(['category', 'store'])->paginate();
+    $products = Product::with(['category', 'store'])
+        ->filter($request->query())
+        ->paginate()
+        ->withQueryString(); // keeps filters in pagination links
 
-        return view('dashboard.products.index', compact('products'));
-    }
+    return view('dashboard.products.index', compact('products'));
+}
+
 
     public function create()
     {
