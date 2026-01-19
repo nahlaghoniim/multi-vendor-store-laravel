@@ -39,10 +39,7 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
                     \App\Http\Middleware\UpdateUserLastActiveAt::class,
             \App\Http\Middleware\MarkNotificationAsRead::class,
-                    \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
-            \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
-            \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class,
-    
+                   
       
 
         ],

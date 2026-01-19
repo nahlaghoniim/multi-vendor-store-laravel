@@ -9,7 +9,6 @@
 
 @section('content')
 
-<h1 class="mb-4">Orders</h1>
 
 {{-- Filters --}}
 <form method="GET" class="row g-2 mb-4">

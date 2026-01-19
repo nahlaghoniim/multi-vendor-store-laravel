@@ -33,7 +33,11 @@
             <td>{{ $user->id }}</td>
             <td><a href="{{ route('dashboard.users.show', $user->id) }}">{{ $user->name }}</a></td>
             <td>{{ $user->email }}</td>
-            <td></td>
+            <td>
+                @foreach($user->roles as $role)
+                    <span class="badge badge-info">{{ $role->name }}</span>
+                @endforeach
+            </td>
             <td>{{ $user->created_at }}</td>
             <td>
                 @can('users.update')
@@ -54,7 +58,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="6">No users defined.</td>
+            <td colspan="7">No users defined.</td>
         </tr>
         @endforelse
     </tbody>

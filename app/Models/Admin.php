@@ -31,9 +31,6 @@ class Admin extends Authenticatable
         'status' => 'boolean',
     ];
 
-    /**
-     * Automatically hash passwords when setting
-     */
     public function setPasswordAttribute($password)
     {
         if ($password) {
@@ -41,35 +38,28 @@ class Admin extends Authenticatable
         }
     }
 
-    /**
-     * Roles relationship (many-to-many polymorphic)
-     */
     public function roles()
     {
         return $this->morphToMany(Role::class, 'authorizable', 'role_user');
     }
 
-    /**
-     * Check if admin has a specific role
-     */
     public function hasRole($role)
     {
         return $this->roles()->where('name', $role)->exists();
     }
 
-    /**
-     * Check if admin is a super admin
-     */
     public function isSuperAdmin()
     {
         return $this->super_admin;
     }
 
     public function profile()
-{
-    return $this->hasOne(Profile::class, 'admin_id');
-}
- public function routeNotificationForBroadcast($notification)
+    {
+        return $this->hasOne(Profile::class, 'admin_id');
+    }
+
+    // This tells Laravel Echo which channel to broadcast to
+    public function receivesBroadcastNotificationsOn()
     {
         return 'App.Models.Admin.' . $this->id;
     }

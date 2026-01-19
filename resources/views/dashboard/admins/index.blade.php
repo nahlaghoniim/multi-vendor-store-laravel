@@ -33,7 +33,11 @@
             <td>{{ $admin->id }}</td>
             <td><a href="{{ route('dashboard.admins.show', $admin->id) }}">{{ $admin->name }}</a></td>
             <td>{{ $admin->email }}</td>
-            <td></td>
+            <td>
+                @foreach($admin->roles as $role)
+                    <span class="badge badge-info">{{ $role->name }}</span>
+                @endforeach
+            </td>
             <td>{{ $admin->created_at }}</td>
             <td>
                 @can('admins.update')
@@ -54,7 +58,7 @@
         </tr>
         @empty
         <tr>
-            <td colspan="6">No admins defined.</td>
+            <td colspan="7">No admins defined.</td>
         </tr>
         @endforelse
     </tbody>

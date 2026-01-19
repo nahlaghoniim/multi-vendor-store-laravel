@@ -29,11 +29,22 @@ class AdminsController extends Controller
      */
     public function create()
     {
-        $roles = Role::all();
-        return view('dashboard.admins.create', [
-            'admin' => new Admin(),
-            'roles' => $roles,
-        ]);
+        $roles = Role::all();          
+        $admin_roles = [];             
+        $admin = new Admin();          
+
+        return view('dashboard.admins.create', compact('admin', 'roles', 'admin_roles'));
+    }
+
+    /**
+     * Show the form for editing an existing admin.
+     */
+    public function edit(Admin $admin)
+    {
+        $roles = Role::all();                              
+        $admin_roles = $admin->roles->pluck('id')->toArray(); 
+
+        return view('dashboard.admins.edit', compact('admin', 'roles', 'admin_roles'));
     }
 
     /**

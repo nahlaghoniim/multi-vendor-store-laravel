@@ -25,6 +25,15 @@ class Store extends Model
 
     public $timestamps = true;
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'status',
+        'logo_image',
+        'cover_image'
+    ];
+
     public function products()
     {
         return $this->hasMany(Product::class, 'store_id', 'id');

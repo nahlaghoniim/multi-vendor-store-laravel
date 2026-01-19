@@ -15,6 +15,9 @@ class DashboardController extends Controller
 
   public function index()
 {
+    // Check if user has the ability to view dashboard
+    $this->authorize('dashboard.view');
+    
     $user = Auth::user();
     $title = 'Store';
 

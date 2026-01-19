@@ -11,7 +11,11 @@
 
 <div class="mb-5">
     <a href="{{ route('dashboard.products.create') }}" class="btn btn-sm btn-outline-primary mr-2">Create</a>
+    <a href="{{ route('dashboard.products.import') }}" class="btn btn-sm btn-outline-success">Import</a>
 </div>
+
+
+
 
 <x-alert type="success" />
 <x-alert type="info" />

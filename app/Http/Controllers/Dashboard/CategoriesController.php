@@ -173,8 +173,11 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Category $category)
+   public function destroy(Category $category)
 {
+    // Authorization check
+    Gate::authorize('categories.delete');
+
     // Check if category has products
     if ($category->products()->exists()) {
         return redirect()
@@ -191,7 +194,6 @@ class CategoriesController extends Controller
         ->route('dashboard.categories.index')
         ->with('success', 'Category deleted successfully.');
 }
-
 
     protected function uploadImgae(Request $request)
     {

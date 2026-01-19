@@ -14,21 +14,29 @@ class ProductsController extends Controller
 {
     $this->authorize('view-any', Product::class);
 
-    $products = Product::with(['category', 'store'])
-        ->filter($request->query())
-        ->paginate()
-        ->withQueryString(); // keeps filters in pagination links
+    $query = Product::with(['category', 'store'])
+        ->filter($request->query());
+
+    if ($request->has('store_id')) {
+        $query->where('store_id', $request->query('store_id'));
+    }
+
+    $products = $query->paginate()->withQueryString();
 
     return view('dashboard.products.index', compact('products'));
 }
 
 
-    public function create()
-    {
-        $this->authorize('create', Product::class);
 
-        return view('dashboard.products.create');
-    }
+   public function create()
+{
+    $this->authorize('create', Product::class);
+
+    $categories = \App\Models\Category::all();
+    $stores = \App\Models\Store::all();
+
+    return view('dashboard.products.create', compact('categories', 'stores'));
+}
 
 public function store(Request $request)
 {
@@ -72,15 +80,16 @@ public function update(Request $request, Product $product)
 
 
 
+public function edit(Product $product)
+{
+    $this->authorize('update', $product);
 
-    public function edit(Product $product)
-    {
-        $this->authorize('update', $product);
+    $tags = $product->tags()->pluck('name')->implode(',');
+    $categories = \App\Models\Category::all();
+    $stores = \App\Models\Store::all();
 
-        $tags = $product->tags()->pluck('name')->implode(',');
-
-        return view('dashboard.products.edit', compact('product', 'tags'));
-    }
+    return view('dashboard.products.edit', compact('product', 'tags', 'categories', 'stores'));
+}
 
    
 

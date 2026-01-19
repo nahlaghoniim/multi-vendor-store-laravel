@@ -10,6 +10,14 @@ return [
     ],
 
     [
+        'icon'    => 'fas fa-store nav-icon',
+        'route'   => 'dashboard.stores.index',
+        'title'   => 'Stores',
+        'active'  => 'dashboard.stores.*',
+        'ability' => 'stores.view', // optional
+    ],
+
+    [
         'icon'    => 'fas fa-tags nav-icon',
         'route'   => 'dashboard.categories.index',
         'title'   => 'Categories',

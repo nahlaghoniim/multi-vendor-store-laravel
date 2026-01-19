@@ -2,196 +2,154 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <title>{{ config('app.name') }} | Admin Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name') }} | Log in</title>
 
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+    <!-- ShopGrid CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/LineIcons.3.0.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
     <style>
-        .login-page {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #111827, #1f2933);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .login-box {
-            width: 400px;
+
+        .auth-card {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 18px;
+            padding: 40px;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.5);
+            color: #fff;
         }
-        .card {
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-        .card-header {
-            background: transparent;
-            border-bottom: none;
-            padding: 30px 30px 0;
-        }
-        .card-header .h1 {
-            font-size: 2rem;
+
+        .auth-card h3 {
             font-weight: 700;
-            color: #333;
-            margin: 0;
+            margin-bottom: 8px;
         }
-        .card-body {
-            padding: 30px;
-        }
-        .login-subtitle {
-            color: #6c757d;
+
+        .auth-card p {
             font-size: 0.95rem;
+            opacity: 0.85;
             margin-bottom: 30px;
-            font-weight: 400;
         }
-        .form-control {
-            border-radius: 8px;
-            padding: 12px 15px;
-            height: auto;
-        }
-        .input-group-text {
-            border-radius: 0 8px 8px 0;
-            background-color: #f8f9fa;
-            border-left: none;
-        }
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        .auth-card .form-control {
+            background: rgba(255,255,255,0.1);
             border: none;
-            border-radius: 8px;
-            padding: 12px;
+            color: #fff;
+            padding: 14px 16px;
+            border-radius: 10px;
+        }
+
+        .auth-card .form-control::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .auth-card .form-control:focus {
+            background: rgba(255,255,255,0.15);
+            box-shadow: none;
+            outline: none;
+        }
+
+        .auth-card .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
             font-weight: 600;
-            transition: transform 0.2s;
         }
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+
+        .auth-card .btn:hover {
+            transform: translateY(-1px);
         }
-        .links-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #e9ecef;
+
+        .auth-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
-        .links-section a {
-            color: #667eea;
-            text-decoration: none;
-            transition: color 0.2s;
+
+        .auth-meta a {
+            color: #c7d2fe;
         }
-        .links-section a:hover {
-            color: #764ba2;
-            text-decoration: underline;
-        }
-        .icheck-primary label {
-            font-weight: 400;
-            color: #6c757d;
+
+        .invalid-feedback {
+            color: #fca5a5;
+            font-size: 0.85rem;
         }
     </style>
 </head>
-<body class="hold-transition login-page">
-<div class="login-box">
-    <div class="card card-outline">
-        <div class="card-header text-center">
-            <a href="{{ route('login') }}" class="h1">
-                <i class="fas fa-store text-primary"></i> <b>StoreX</b>
-            </a>
-            <p class="login-subtitle">Welcome back! Please login to your account</p>
+
+<body>
+
+<div class="auth-card">
+    <h3>Admin Login</h3>
+    <p>Secure access to the dashboard</p>
+
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
         </div>
-        <div class="card-body">
-            <!-- Session Status -->
-            @if (session('status'))
-                <div class="alert alert-success alert-dismissible">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                    {{ session('status') }}
-                </div>
+    @endif
+
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
+
+        <div class="mb-3">
+            <input
+                type="text"
+                name="{{ config('fortify.username') }}"
+                class="form-control @error(config('fortify.username')) is-invalid @enderror"
+                placeholder="Email or Username"
+                value="{{ old(config('fortify.username')) }}"
+                required
+                autofocus
+            >
+            @error(config('fortify.username'))
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="mb-3">
+            <input
+                type="password"
+                name="password"
+                class="form-control @error('password') is-invalid @enderror"
+                placeholder="Password"
+                required
+            >
+            @error('password')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <div class="auth-meta">
+            <label>
+                <input type="checkbox" name="remember"> Remember
+            </label>
+
+            @if (Route::has('password.request'))
+                <a href="{{ route('password.request') }}">Forgot?</a>
             @endif
-
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-
-                <!-- Email/Username/Phone -->
-                <div class="input-group mb-3">
-                    <input type="text" 
-                           name="{{ config('fortify.username') }}" 
-                           class="form-control @error('email') is-invalid @enderror" 
-                           placeholder="Email, Phone, or Username"
-                           value="{{ old('email') }}"
-                           required 
-                           autofocus>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-user"></span>
-                        </div>
-                    </div>
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-
-                <!-- Password -->
-                <div class="input-group mb-3">
-                    <input type="password" 
-                           name="password" 
-                           class="form-control @error('password') is-invalid @enderror" 
-                           placeholder="Password"
-                           required 
-                           autocomplete="current-password">
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-lock"></span>
-                        </div>
-                    </div>
-                    @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-
-                <div class="row align-items-center mb-3">
-                    <div class="col-7">
-                        <div class="icheck-primary">
-                            <input type="checkbox" id="remember" name="remember">
-                            <label for="remember">
-                                Remember Me
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-5">
-                        <button type="submit" class="btn btn-primary btn-block">Login</button>
-                    </div>
-                </div>
-            </form>
-
-            <div class="links-section text-center">
-                @if (Route::has('password.request'))
-                    <p class="mb-2">
-                        <a href="{{ route('password.request') }}">
-                            <i class="fas fa-key"></i> Forgot your password?
-                        </a>
-                    </p>
-                @endif
-                
-                @if (Route::has('register'))
-                    <p class="mb-0">
-                        Don't have an account? 
-                        <a href="{{ route('register') }}"><strong>Sign up</strong></a>
-                    </p>
-                @endif
-            </div>
         </div>
-    </div>
+
+        <button type="submit" class="btn">
+            Sign in
+        </button>
+    </form>
 </div>
 
-<!-- jQuery -->
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-<!-- Bootstrap 4 -->
-<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<!-- AdminLTE App -->
-<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+<script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 </body>
 </html>

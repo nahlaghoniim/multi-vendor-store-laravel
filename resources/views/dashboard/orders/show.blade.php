@@ -14,7 +14,6 @@
 
 @section('content')
 
-<h1 class="mb-4">Order #{{ $order->number }}</h1>
 
 <div class="row">
 
